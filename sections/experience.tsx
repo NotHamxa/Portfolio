@@ -18,14 +18,16 @@ export default function ExperienceSection({sectionsRef}: Props) {
             year: "2024",
             role: "Junior Software Trainee",
             company: "Foxit PVT",
-            description: "Developed and maintained ASP .NET projects.'",
+            description: "Developed and maintained ASP .NET projects.\n" +
+                "",
             tech: ["ASP .NET", "C#", "MySQL"],
         },
         {
             year: "2023",
             role: "Intern",
             company: "DOST PVT",
-            description: "Getting started with REST APIs and no SQL databases.",
+            description: "Getting started with REST APIs, No SQL databases," +
+                "Web authentication and security.",
             tech: ["Python", "Fast API", "MongoDB"],
         },
     ]

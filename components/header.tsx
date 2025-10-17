@@ -8,7 +8,7 @@ interface Props {
     sectionsRef:RefObject<(HTMLElement | null)[]>
 }
 export default function Header({sectionsRef}:Props){
-    const skills:string[] = ["Python", "React", "TypeScript", "C++",".NET"]
+    const skills:string[] = ["Python", "React", "TypeScript", "C++",".NET","MongoDB","MySql"]
 
     return (
         <header
@@ -31,7 +31,7 @@ export default function Header({sectionsRef}:Props){
 
                     <div className="space-y-6 max-w-md">
                         <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
-                            Frontend Developer crafting digital experiences at the intersection of
+                            Fullstack Developer crafting digital experiences at the intersection of
                             <span className="text-foreground"> design</span>,<span className="text-foreground"> technology</span>,
                             and
                             <span className="text-foreground"> user experience</span>.

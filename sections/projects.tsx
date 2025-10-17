@@ -1,18 +1,19 @@
-import {RefObject} from "react";
+import { RefObject } from "react";
+import Link from "next/link";
 
 interface Props {
-    sectionsRef:RefObject<(HTMLElement | null)[]>
+    sectionsRef: RefObject<(HTMLElement | null)[]>;
 }
 
-type project = {
+type Project = {
     title: string;
     excerpt: string;
     date: string;
     readTime: string;
-}
+};
 
-export default function ProjectsSection({sectionsRef}:Props) {
-    const projects: project[] = [
+export default function ProjectsSection({ sectionsRef }: Props) {
+    const projects: Project[] = [
         {
             title: "Volt",
             excerpt: "",
@@ -21,17 +22,18 @@ export default function ProjectsSection({sectionsRef}:Props) {
         },
         {
             title: "Epsilon",
-            excerpt: "The entire tech stack built for the team registrations of epsilon(Alpha College Science Olympiad)",
+            excerpt:
+                "The entire tech stack built for the team registrations of epsilon (Alpha College Science Olympiad)",
             date: "Oct 2024 - Feb 2025",
             readTime: "",
         },
-    ]
+    ];
 
     return (
         <section
             id="thoughts"
             ref={(el) => {
-                sectionsRef.current[2] = el
+                sectionsRef.current[2] = el;
             }}
             className="min-h-screen py-20 sm:py-32 opacity-0"
         >
@@ -40,9 +42,10 @@ export default function ProjectsSection({sectionsRef}:Props) {
 
                 <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">
                     {projects.map((post, index) => (
-                        <article
+                        <Link
                             key={index}
-                            className="group p-6 sm:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-500 hover:shadow-lg cursor-pointer"
+                            href={`/project/${post.title.toLowerCase()}`}
+                            className="group p-6 sm:p-8 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-500 hover:shadow-lg cursor-pointer block"
                         >
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between text-xs text-muted-foreground font-mono">
@@ -54,7 +57,9 @@ export default function ProjectsSection({sectionsRef}:Props) {
                                     {post.title}
                                 </h3>
 
-                                <p className="text-muted-foreground leading-relaxed">{post.excerpt}</p>
+                                <p className="text-muted-foreground leading-relaxed">
+                                    {post.excerpt}
+                                </p>
 
                                 <div className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">
                                     <span>Read more</span>
@@ -73,10 +78,10 @@ export default function ProjectsSection({sectionsRef}:Props) {
                                     </svg>
                                 </div>
                             </div>
-                        </article>
+                        </Link>
                     ))}
                 </div>
             </div>
         </section>
-    )
+    );
 }

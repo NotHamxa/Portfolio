@@ -1,7 +1,6 @@
 "use client"
 
-import Link from "next/link"
-import {RefObject, useEffect, useRef, useState} from "react"
+import {useEffect, useRef, useState} from "react"
 import Header from "@/components/header";
 import ContactSection from "@/sections/contact";
 import Footer from "@/components/footer";
@@ -9,13 +8,8 @@ import ExperienceSection from "@/sections/experience";
 import ProjectsSection from "@/sections/projects";
 
 export default function Home() {
-  const [isDark, setIsDark] = useState(true)
   const [activeSection, setActiveSection] = useState("")
     const sectionsRef = useRef<(HTMLElement | null)[]>([]);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", isDark)
-  }, [isDark])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -37,9 +31,6 @@ export default function Home() {
     return () => observer.disconnect()
   }, [])
 
-  const toggleTheme = () => {
-    setIsDark(!isDark)
-  }
 
   return (
     <div className="min-h-screen bg-background text-foreground relative">
@@ -63,7 +54,6 @@ export default function Home() {
           <ExperienceSection sectionsRef={sectionsRef}/>
           <ProjectsSection sectionsRef={sectionsRef}/>
           <ContactSection sectionsRef={sectionsRef}/>
-          <Footer isDark={isDark} toggleTheme={toggleTheme}/>
       </main>
 
       <div className="fixed bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none"></div>
