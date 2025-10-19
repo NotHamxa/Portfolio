@@ -16,7 +16,7 @@ export default function ProjectDetailPage() {
             "title": "Volt",
             "logo": "/images/volt/logo.png",
             "content": voltContent,
-            "downloadUrl": "asd"
+            "downloadUrl": "https://boyijeqhff9mnkdi.public.blob.vercel-storage.com/Volt%20Setup"
         }
     ]
     const { slug } = useParams()
