@@ -1,7 +1,7 @@
 const voltContent = `
     <text>
-        Tired of using the basic windows search menu. Introducing Volt,
-        a react-ts electron based windows search application.
+    Volt is a sleek Windows search app built with React + TypeScript and Electron. 
+    Effortlessly find files, apps, and folders, or search the web using bangs—all in one place.
     </text>
     
     <img>/images/volt/img1.png</img>

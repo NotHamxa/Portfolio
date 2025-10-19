@@ -16,7 +16,7 @@ export default function ProjectDetailPage() {
             "title": "Volt",
             "logo": "/images/volt/logo.png",
             "content": voltContent,
-            "downloadUrl": "https://boyijeqhff9mnkdi.public.blob.vercel-storage.com/Volt%20Setup"
+            "downloadUrl": "https://boyijeqhff9mnkdi.public.blob.vercel-storage.com/Volt%20Setup.exe"
         }
     ]
     const { slug } = useParams()
@@ -112,7 +112,6 @@ export default function ProjectDetailPage() {
 
     return (
         <div className="min-h-screen bg-background text-foreground px-6 sm:px-8 lg:px-24 py-16 max-w-4xl mx-auto">
-            {/* Header Section */}
             <div
                 ref={(el) => {sectionsRef.current[0] = el}}
                 className="opacity-0 translate-y-8 transition-all duration-700"
@@ -148,8 +147,6 @@ export default function ProjectDetailPage() {
                     )}
                 </div>
             </div>
-
-            {/* Content Blocks */}
             <div className="space-y-10 leading-relaxed text-lg">
                 {blocks.map((block, idx) => {
                     if (block.type === "text") {
