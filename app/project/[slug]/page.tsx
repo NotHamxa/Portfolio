@@ -117,9 +117,9 @@ export default function ProjectDetailPage() {
                 className="opacity-0 translate-y-8 transition-all duration-700"
             >
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-10">
-                    <div className="flex gap-4 sm:gap-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 text-center sm:text-left">
                         {logo && (
-                            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden flex-shrink-0 self-end items-end">
+                            <div className="relative w-20 h-20 sm:w-24 sm:h-24 mx-auto sm:mx-0 rounded-xl overflow-hidden">
                                 <Image
                                     src={logo}
                                     alt={`${title} logo`}
@@ -128,12 +128,12 @@ export default function ProjectDetailPage() {
                                 />
                             </div>
                         )}
-                        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight">
+                        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-light tracking-tight mt-2 sm:mt-0">
                             {title}
                         </h1>
                     </div>
                     {downloadUrl && (
-                        <div className="flex items-center">
+                        <div className="flex justify-center sm:justify-end">
                             <Button
                                 asChild
                                 variant="outline"
@@ -146,6 +146,7 @@ export default function ProjectDetailPage() {
                         </div>
                     )}
                 </div>
+
             </div>
             <div className="space-y-10 leading-relaxed text-lg">
                 {blocks.map((block, idx) => {
