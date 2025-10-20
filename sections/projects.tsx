@@ -16,7 +16,7 @@ export default function ProjectsSection({ sectionsRef }: Props) {
     const projects: Project[] = [
         {
             title: "Volt",
-            excerpt: "",
+            excerpt: "A fast, modern Windows search app that finds files, apps, and web results in one place.",
             date: "May 2025",
             readTime: "",
         },

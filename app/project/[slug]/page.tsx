@@ -7,7 +7,7 @@ import { useParams } from "next/navigation"
 import NotFound from "@/components/notFound"
 import { useEffect, useRef } from "react"
 import {ProjectType} from "@/models/projectContent";
-import {voltContent} from "@/lib/content";
+import {epsilonContent, voltContent} from "@/lib/content";
 
 
 export default function ProjectDetailPage() {
@@ -17,6 +17,12 @@ export default function ProjectDetailPage() {
             "logo": "/images/volt/logo.png",
             "content": voltContent,
             "downloadUrl": "https://boyijeqhff9mnkdi.public.blob.vercel-storage.com/Volt%20Setup.exe"
+        },
+        {
+            "title":"Epsilon",
+            "logo":"/images/epsilon/logo.png",
+            "content":epsilonContent,
+            "downloadUrl":null
         }
     ]
     const { slug } = useParams()
@@ -51,9 +57,14 @@ export default function ProjectDetailPage() {
     const { title, logo, content, downloadUrl } = data
 
     const parseBlocks = (data: string) => {
-        const blocks: { type: "text" | "img" | "link"; content: string; href?: string }[] = []
+        const blocks: {
+            type: "text" | "img" | "link" | "heading";
+            content: string;
+            href?: string
+        }[] = []
+
         const regex =
-            /<text>([\s\S]*?)<\/text>|<img>(.*?)<\/img>|<link href="(.*?)">(.*?)<\/link>/g
+            /<text>([\s\S]*?)<\/text>|<img>(.*?)<\/img>|<link href="(.*?)">(.*?)<\/link>|<heading>([\s\S]*?)<\/heading>/g
 
         let match
         while ((match = regex.exec(data)) !== null) {
@@ -63,11 +74,14 @@ export default function ProjectDetailPage() {
                 blocks.push({ type: "img", content: match[2].trim() })
             } else if (match[3] && match[4]) {
                 blocks.push({ type: "link", href: match[3].trim(), content: match[4].trim() })
+            } else if (match[5]) {
+                blocks.push({ type: "heading", content: match[5].trim() })
             }
         }
 
         return blocks
     }
+
 
     const renderTextWithLinks = (text: string) => {
         const parts: (string | { href: string; label: string })[] = []
@@ -119,7 +133,7 @@ export default function ProjectDetailPage() {
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-10">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 text-center sm:text-left">
                         {logo && (
-                            <div className="relative w-20 h-20 sm:w-24 sm:h-24 mx-auto sm:mx-0 rounded-xl overflow-hidden">
+                            <div className="relative w-20 h-20 s m:w-24 sm:h-24 mx-auto sm:mx-0 rounded-xl overflow-hidden">
                                 <Image
                                     src={logo}
                                     alt={`${title} logo`}
@@ -161,7 +175,19 @@ export default function ProjectDetailPage() {
                             </div>
                         )
                     }
-
+                    if (block.type === "heading") {
+                        return (
+                            <div
+                                key={idx}
+                                ref={(el) => { sectionsRef.current[idx + 1] = el }}
+                                className="opacity-0 translate-y-8 transition-all duration-700"
+                            >
+                                <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight mb-4 mt-8">
+                                    {block.content}
+                                </h2>
+                            </div>
+                        )
+                    }
                     if (block.type === "img") {
                         return (
                             <div
