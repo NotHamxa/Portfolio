@@ -192,14 +192,14 @@ export default function ProjectDetailPage() {
                         return (
                             <div
                                 key={idx}
-                                ref={(el) => {sectionsRef.current[idx + 1] = el}}
+                                ref={(el) => { sectionsRef.current[idx + 1] = el }}
                                 className="opacity-0 translate-y-8 transition-all duration-700 relative w-full aspect-[16/9] rounded-2xl overflow-hidden"
                             >
                                 <Image
                                     src={block.content}
                                     alt={`Project image ${idx + 1}`}
                                     fill
-                                    className="object-contain p-4"
+                                    className="object-contain p-2 sm:p-4"
                                 />
                             </div>
                         )
