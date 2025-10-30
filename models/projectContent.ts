@@ -1,6 +1,8 @@
 export type ProjectType = {
-    title: string
-    logo: string | null
-    content: string
-    downloadUrl: string | null
-}
+    title: string;
+    logo: string | null;
+    content: string;
+    downloadUrl: {
+        [key: string]: string;
+    };
+};

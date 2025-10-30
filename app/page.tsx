@@ -3,7 +3,6 @@
 import {useEffect, useRef, useState} from "react"
 import Header from "@/components/header";
 import ContactSection from "@/sections/contact";
-import Footer from "@/components/footer";
 import ExperienceSection from "@/sections/experience";
 import ProjectsSection from "@/sections/projects";
 
