@@ -14,10 +14,14 @@ type PlatformLinks = {
 interface DownloadModalProps {
     visible: boolean;
     setVisible: (v: boolean) => void;
-    links: PlatformLinks;
+    links: PlatformLinks | null;
 }
 
 const DownloadModal = ({ visible, setVisible, links }: DownloadModalProps) => {
+
+    if (!links)
+        return <></>;
+
     const platforms = [
         { key: "windows", name: "Windows", icon: "mdi:windows" },
         { key: "macos", name: "macOS", icon: "mdi:apple" },
@@ -25,8 +29,6 @@ const DownloadModal = ({ visible, setVisible, links }: DownloadModalProps) => {
         { key: "android", name: "Android", icon: "mdi:android" },
         { key: "ios", name: "iOS", icon: "mdi:apple-ios" },
     ] as const;
-
-    // Filter available platforms
     const available = platforms.filter((p) => links[p.key as keyof PlatformLinks]);
 
     return (

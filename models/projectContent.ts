@@ -4,5 +4,5 @@ export type ProjectType = {
     content: string;
     downloadUrl: {
         [key: string]: string;
-    };
+    } | null;
 };

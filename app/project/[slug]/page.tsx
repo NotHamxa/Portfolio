@@ -24,7 +24,7 @@ export default function ProjectDetailPage() {
             title: "Epsilon",
             logo: "/images/epsilon/logo.png",
             content: epsilonContent,
-            downloadUrl: {},
+            downloadUrl: null,
         },
     ]
 
