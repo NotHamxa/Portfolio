@@ -58,13 +58,11 @@ export default function ProjectDetailPage() {
         return () => observer.disconnect()
     }, [])
 
-    // Show sticky header when title section leaves view
     useEffect(() => {
         const handleScroll = () => {
             if (titleRef.current) {
                 const rect = titleRef.current.getBoundingClientRect()
-                // Trigger when title is out of view (completely above)
-                setShowStickyHeader(rect.bottom < 50)
+                setShowStickyHeader(rect.bottom < 100)
             }
         }
 
