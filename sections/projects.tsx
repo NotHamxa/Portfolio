@@ -34,7 +34,13 @@ export default function ProjectsSection({ sectionsRef }: Props) {
             excerpt:"A discord bot that tracks voice channel activity, rewards users with points, and creates leaderboards for the most engaged members",
             date:"Jan - Aug 2024",
             readTime:""
-        }
+        },
+        {
+            title: "ExpenseTracker",
+            excerpt: "A mobile app to track spending, manage budgets, and visualize expenses with intuitive charts and insights.",
+            date: "Oct 2025",
+            readTime: "",
+        },
     ];
 
     return (

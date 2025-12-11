@@ -5,4 +5,5 @@ export type ProjectType = {
     downloadUrl: {
         [key: string]: string;
     } | null;
+    githubUrl:string | null;
 };
