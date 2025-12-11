@@ -1,5 +1,7 @@
 import { RefObject } from "react";
 import Link from "next/link";
+import {red} from "next/dist/lib/picocolors";
+import {read} from "node:fs";
 
 interface Props {
     sectionsRef: RefObject<(HTMLElement | null)[]>;
@@ -27,6 +29,12 @@ export default function ProjectsSection({ sectionsRef }: Props) {
             date: "Oct 2024 - Feb 2025",
             readTime: "",
         },
+        {
+            title:"CAT",
+            excerpt:"A discord bot that tracks voice channel activity, rewards users with points, and creates leaderboards for the most engaged members",
+            date:"Jan - Aug 2024",
+            readTime:""
+        }
     ];
 
     return (

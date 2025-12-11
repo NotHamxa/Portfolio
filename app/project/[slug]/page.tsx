@@ -7,7 +7,7 @@ import { useParams } from "next/navigation"
 import NotFound from "@/components/notFound"
 import { useEffect, useRef, useState } from "react"
 import { ProjectType } from "@/models/projectContent"
-import { epsilonContent, voltContent } from "@/lib/content"
+import {discordBotContent, epsilonContent, voltContent} from "@/lib/content"
 import DownloadModal from "@/components/downloadModal";
 
 export default function ProjectDetailPage() {
@@ -26,6 +26,12 @@ export default function ProjectDetailPage() {
             content: epsilonContent,
             downloadUrl: null,
         },
+        {
+            title:"CAT",
+            logo:"/images/cat/logo.png",
+            content:discordBotContent,
+            downloadUrl:null,
+        }
     ]
 
     const { slug } = useParams()
