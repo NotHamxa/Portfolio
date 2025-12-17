@@ -17,9 +17,9 @@ export default function ProjectDetailPage() {
             logo: "/images/volt/logo.png",
             content: voltContent,
             downloadUrl:{
-                "windows":"https://github.com/NotHamxa/Volt/releases/download/beta/Volt.Setup.0.0.0.exe"
+                "windows":"https://boyijeqhff9mnkdi.public.blob.vercel-storage.com/Volt%20Setup%200.0.0.exe"
             },
-            githubUrl:"https://github.com/NotHamxa/spotlight-search"
+            githubUrl:"https://github.com/NotHamxa/volt"
         },
         {
             title: "Epsilon",
