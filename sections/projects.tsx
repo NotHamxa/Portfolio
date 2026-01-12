@@ -52,7 +52,7 @@ export default function ProjectsSection({ sectionsRef }: Props) {
             className="min-h-screen py-20 sm:py-32 opacity-0"
         >
             <div className="space-y-12 sm:space-y-16">
-                <h2 className="text-3xl sm:text-4xl font-light">Projects</h2>
+                <h2 className="text-3xl sm:text-4xl font-medium">Projects</h2>
 
                 <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">
                     {projects.map((post, index) => (

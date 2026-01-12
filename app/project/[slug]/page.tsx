@@ -235,7 +235,7 @@ export default function ProjectDetailPage() {
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-10">
                         <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 text-center sm:text-left">
                             {logo && (
-                                <div className="relative w-20 h-20 sm:w-24 sm:h-24 mx-auto sm:mx-0 rounded-xl overflow-hidden border border-border">
+                                <div className="relative w-20 h-20 sm:w-24 sm:h-24 mx-auto sm:mx-0 rounded-xl overflow-hidden">
                                     <Image
                                         src={logo}
                                         alt={`${title} logo`}
