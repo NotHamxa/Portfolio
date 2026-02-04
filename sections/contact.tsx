@@ -18,7 +18,7 @@ export default function ContactSection({sectionsRef}: Props){
     const email = "hamxa.ahmed2007@gmail.com";
     const socials: socialsType[] = [
         { name: "GitHub", handle: "@NotHamxa", url: "https://github.com/NotHamxa" },
-        { name: "LinkedIn", handle: "NotHamxa", url: "https://linkedin.com/in/NotHamxa" },
+        { name: "LinkedIn", handle: "Hamza Ahmed", url: "https://linkedin.com/in/hamzahmed07" },
     ]
     return (
         <section id="connect" ref={(el) => {
@@ -60,6 +60,8 @@ export default function ContactSection({sectionsRef}: Props){
                             <Link
                                 key={social.name}
                                 href={social.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="group p-4 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm"
                             >
                                 <div className="space-y-2">

@@ -136,3 +136,49 @@
     }
   }
 }
+
+
+
+.bg-grid-pattern {
+  background-image:
+          linear-gradient(to right, hsl(var(--border)) 1px, transparent 1px),
+          linear-gradient(to bottom, hsl(var(--border)) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Fade in up animation */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.7s ease-out forwards;
+}
+
+/* Prose styling for better text rendering */
+.prose {
+  color: hsl(var(--muted-foreground));
+}
+
+.prose p {
+  margin-bottom: 1.25em;
+  line-height: 1.75;
+}
+
+.prose a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: color 0.2s;
+}
+
+.prose a:hover {
+  color: hsl(var(--primary) / 0.8);
+}
