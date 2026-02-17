@@ -7,7 +7,7 @@ import { useParams, useRouter } from "next/navigation"
 import NotFound from "@/components/notFound"
 import { useEffect, useRef, useState } from "react"
 import { ProjectType } from "@/models/projectContent"
-import { discordBotContent, epsilonContent, expenseContent, voltContent } from "@/lib/content"
+import {discordBotContent, eafContent, epsilonContent, expenseContent, voltContent} from "@/lib/content"
 import DownloadModal from "@/components/downloadModal"
 import GithubModal from "@/components/githubModal"
 
@@ -19,7 +19,7 @@ export default function ProjectDetailPage() {
             logo: "/images/volt/logo.png",
             content: voltContent,
             downloadUrl: {
-                "windows": "https://boyijeqhff9mnkdi.public.blob.vercel-storage.com/Volt%20Setup%200.0.0.exe"
+                "windows": "https://github.com/NotHamxa/Volt/releases/download/v1.0.3/Volt-Setup-1.0.3.exe"
             },
             githubUrl: [
                 {
@@ -47,6 +47,13 @@ export default function ProjectDetailPage() {
                     link: "https://github.com/NotHamxa/EpsilonAdminPanelMobile"
                 }
             ]
+        },
+        {
+            title: "EAF",
+            logo: null,
+            content: eafContent,
+            downloadUrl:null,
+            githubUrl:[]
         },
         {
             title: "CAT",

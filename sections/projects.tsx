@@ -30,6 +30,12 @@ export default function ProjectsSection({ sectionsRef }: Props) {
             readTime: "",
         },
         {
+          title:"EAF",
+          excerpt: "An assessment framework platform",
+          date: "Dec 2025 - Jan 2026    ",
+          readTime: "",
+        },
+        {
             title:"CAT",
             excerpt:"A discord bot that tracks voice channel activity, rewards users with points, and creates leaderboards for the most engaged members",
             date:"Jan - Aug 2024",

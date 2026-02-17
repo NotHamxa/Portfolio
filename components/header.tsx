@@ -21,7 +21,7 @@ export default function Header({sectionsRef}:Props){
             <div className="grid lg:grid-cols-5 gap-12 sm:gap-16 w-full">
                 <div className="lg:col-span-3 space-y-6 sm:space-y-8">
                     <div className="space-y-3 sm:space-y-2">
-                        <div className="text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / 2025</div>
+                        <div className="text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / 2026</div>
                         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight">
                             Hamza
                             <br />

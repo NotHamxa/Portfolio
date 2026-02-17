@@ -70,6 +70,54 @@ const epsilonContent = `
         Auto-generates ID cards and has a fast QR-based attendance scanner for events.
     </imgText>
 `
+const eafContent = `
+    <text>
+    EAF is an assessment platform where admins can create quizzes using rules. 
+    Rules define the structure of the quiz — what aspects are being tested, how questions 
+    are scored, and what the final result means.
+    </text>
+
+    <heading>
+        Rule Builder
+    </heading>
+
+    <imgText position="left" src="/images/eaf/img1.png">
+        Rules are basically the blueprint for a quiz. You define aspects like Conscientiousness 
+        or Grammar, set which questions fall under each aspect, configure the scoring options, 
+        and set thresholds for what counts as a Pass or Outstanding. Once a rule is set up, 
+        it handles all the grading automatically.
+    </imgText>
+
+    <heading>
+        Quiz Construction
+    </heading>
+
+    <imgText position="right" src="/images/eaf/img2.png">
+        Quizzes are built on top of rules. Add questions, write the answer options, and assign 
+        point values to each one. The scoring ties back to the rule so everything stays consistent 
+        across attempts.
+    </imgText>
+
+    <heading>
+        Timed Quiz Experience
+    </heading>
+
+    <imgText position="left" src="/images/eaf/img3.png">
+        Candidates take the quiz through a clean timed interface. Supports multiple question types 
+        including drag-to-rank. If the tab gets closed mid-attempt, the quiz auto-resumes from 
+        where they left off so the timer keeps running.
+    </imgText>
+
+    <heading>
+        Responses & Reports
+    </heading>
+
+    <text>
+        All submissions are logged with the candidate's details, timestamps, and completion status. 
+        Each response has a full answer transcript and a detailed report that breaks down scores 
+        per aspect and shows how they performed against the rule thresholds.
+    </text>
+`
 
 const discordBotContent = `
     <text>
@@ -126,4 +174,4 @@ const expenseContent = `
 
 
 
-export { voltContent, epsilonContent, discordBotContent, expenseContent }
+export { voltContent, epsilonContent, discordBotContent, expenseContent, eafContent }
