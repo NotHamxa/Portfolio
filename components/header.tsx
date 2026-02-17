@@ -8,7 +8,7 @@ interface Props {
     sectionsRef:RefObject<(HTMLElement | null)[]>
 }
 export default function Header({sectionsRef}:Props){
-    const skills:string[] = ["Python", "React", "TypeScript", "C++",".NET","MongoDB","MySql"]
+    const skills:string[] = ["Python","FAST API", "React","Next.JS", "TypeScript", "C++",".NET","MongoDB","MySql"]
 
     return (
         <header

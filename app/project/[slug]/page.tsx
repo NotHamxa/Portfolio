@@ -137,14 +137,12 @@ export default function ProjectDetailPage() {
             imgPosition?: "left" | "right"
         }[] = []
 
-        // Enhanced regex to support image-text layouts
         const regex =
             /<imgText position="(left|right)" src="(.*?)">([\s\S]*?)<\/imgText>|<text>([\s\S]*?)<\/text>|<img>(.*?)<\/img>|<link href="(.*?)">(.*?)<\/link>|<heading>([\s\S]*?)<\/heading>/g
 
         let match
         while ((match = regex.exec(data)) !== null) {
             if (match[1] && match[2] && match[3]) {
-                // imgText block
                 blocks.push({
                     type: "imgText",
                     imgPosition: match[1] as "left" | "right",
@@ -152,20 +150,16 @@ export default function ProjectDetailPage() {
                     content: match[3].trim(),
                 })
             } else if (match[4]) {
-                // text block
                 blocks.push({ type: "text", content: match[4].trim() })
             } else if (match[5]) {
-                // img block
                 blocks.push({ type: "img", content: match[5].trim() })
             } else if (match[6] && match[7]) {
-                // link block
                 blocks.push({
                     type: "link",
                     href: match[6].trim(),
                     content: match[7].trim(),
                 })
             } else if (match[8]) {
-                // heading block
                 blocks.push({ type: "heading", content: match[8].trim() })
             }
         }
@@ -280,7 +274,7 @@ export default function ProjectDetailPage() {
 
             <div className="min-h-screen bg-background">
                 {/* Hero Section */}
-                <div className="relative overflow-hidden bg-gradient-to-b from-muted/50 to-background">
+                <div className="relative overflow-hidden bg-linear-to-b from-muted/50 to-background">
                     <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]" />
                     <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-24 sm:py-32">
                         <div ref={titleRef} className="relative">
@@ -295,7 +289,7 @@ export default function ProjectDetailPage() {
 
                             <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12">
                                 {logo && (
-                                    <div className="relative w-24 h-24 lg:w-32 lg:h-32 rounded-2xl overflow-hidden bg-card border border-border shadow-2xl">
+                                    <div className="relative w-24 h-24 lg:w-32 lg:h-32 rounded-2xl overflow-hidden bg-card border border-border shadow-2xl mx-auto lg:mx-0">
                                         <Image
                                             src={logo}
                                             alt={`${title} logo`}
@@ -304,11 +298,11 @@ export default function ProjectDetailPage() {
                                         />
                                     </div>
                                 )}
-                                <div className="flex-1">
+                                <div className="flex-1 text-center lg:text-left">
                                     <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
                                         {title}
                                     </h1>
-                                    <div className="flex flex-wrap gap-3">
+                                    <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
                                         {downloadUrl && (
                                             <Button
                                                 size="lg"
@@ -369,7 +363,7 @@ export default function ProjectDetailPage() {
                                         }}
                                         className="opacity-0 translate-y-8 transition-all duration-700"
                                     >
-                                        <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                                        <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6 bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
                                             {block.content}
                                         </h2>
                                         <div className="h-1 w-20 bg-primary rounded-full" />

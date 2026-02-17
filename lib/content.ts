@@ -1,11 +1,11 @@
 const voltContent = `
     <text>
-    Volt is a sleek Windows search app built with React + TypeScript and Electron. 
-    Effortlessly find files, apps, and folders, or search the web using bangs—all in one place.
+    Volt is a Windows search tool built with React, TypeScript, and Electron. 
+    Quickly find files, apps, and folders, or search the web using bangs (like !gpt or !yt).
     </text>
     
     <imgText position="left" src="/images/volt/img1.png">
-    Keep your most important links and apps at your fingertips — accessible anytime you need them.
+    Pin your most-used links and apps for quick access. Everything you need is just a keystroke away.
     </imgText>
 
     <heading>
@@ -13,20 +13,28 @@ const voltContent = `
     </heading>
     
     <text>
-    Tab is your best friend — switch instantly between app search and web search.
+    Press Tab to switch between searching your computer and searching the web. Pretty handy.
     </text>
 
     <imgText position="right" src="/images/volt/img2.png">
-    Can't let go of your trusty Google suggestions? Volt's got you covered — they're built right in. Search seamlessly with real-time autocomplete that feels just like your favorite search engine.
+    Google suggestions are built in, so you get that familiar autocomplete experience. Works just like you'd expect.
     </imgText>
 
     <imgText position="left" src="/images/volt/img3.png">
-    Streamline your searches — use bangs such as !gpt, !g, or !yt to access ChatGPT and other platforms instantly. Power users will love the efficiency of jumping directly to their favorite sites without extra clicks.
+    Use bang commands (!gpt, !g, !yt) to jump straight to ChatGPT, Google, YouTube, etc. Saves time when switching between sites.
     </imgText>
 
     <text>
-    Volt keeps track of your search history, so you never have to search twice. Quickly revisit previous searches and pick up right where you left off.
+    Search history is saved locally, so you can quickly pull up previous searches.
     </text>
+    
+    <heading>
+        File Search
+    </heading>
+    
+    <imgText position="right" src="/images/volt/img4.png">
+    Add folders to index and Volt will scan them for lightning-fast file searches. No more waiting for Windows Search to catch up - results appear instantly as you type. Works great for project folders, downloads, or anywhere you keep important files.
+    </imgText>
 `
 
 const epsilonContent = `
@@ -37,9 +45,9 @@ const epsilonContent = `
     </heading>
     
     <imgText position="left" src="/images/epsilon/img1.png">
-        The backend serves as the core engine of the platform — processing requests, 
-        managing data, and coordinating every feature behind the scenes. 
-        It ensures fast responses, secure operations, and smooth communication between all parts of the system.
+        The backend is built with Python and FastAPI. Handles all request processing, 
+        data management, and coordinates between different parts of the system. 
+        Focused on keeping response times fast and making sure everything communicates properly.
     </imgText>
     
     <heading>
@@ -47,10 +55,9 @@ const epsilonContent = `
     </heading>
     
     <imgText position="right" src="/images/epsilon/img2.png">
-        The frontend is built with a modern, minimalist design that keeps the experience clean and 
-        distraction-free. It features a fast, highly responsive interface that adapts seamlessly across 
-        devices, with user data and state saved securely in the cloud — so everything stays perfectly in 
-        sync no matter where you log in.
+        The frontend uses React with TypeScript. Clean, minimal design that's not cluttered. 
+        Responsive across devices, and user data gets saved to the cloud so everything syncs 
+        wherever you log in.
     </imgText>
     
     <heading>
@@ -58,21 +65,20 @@ const epsilonContent = `
     </heading>
     
     <imgText position="left" src="/images/epsilon/img3.png">
-        The admin panel provides a powerful control center for managing the entire platform. 
-        Admins can review registrations, handle queries, oversee user accounts, and coordinate with 
-        brand ambassadors — all from one streamlined dashboard. The system automatically generates ID cards 
-        and supports fast attendance scanning, making event management smooth and efficient.
+        The admin panel is a desktop app built with Electron. Admins can manage registrations, 
+        handle user queries, and coordinate with brand ambassadors all in one place. 
+        Auto-generates ID cards and has a fast QR-based attendance scanner for events.
     </imgText>
 `
 
 const discordBotContent = `
     <text>
-    Meet Cat — a powerful Discord bot built to reward your community's engagement. 
-    Track voice channel activity, earn points, and climb the leaderboard—all seamlessly integrated.
+    Cat is a Discord bot that tracks voice channel activity and rewards active members. 
+    Logs time spent in VC, awards points, and runs leaderboards.
     </text>
     
     <imgText position="left" src="/images/cat/img1.png">
-        Keep your members motivated by showing exactly how many hours they've spent in voice channels — transparency meets fun.
+        Shows everyone how much time they've spent in voice channels. Adds some friendly competition and keeps people engaged.
     </imgText>
     
     <heading>
@@ -80,25 +86,25 @@ const discordBotContent = `
     </heading>
     
     <text>
-        Who's the ultimate chatter? TimeTracker automatically generates leaderboards for the members who spend the most hours in voice channels. Healthy competition keeps your community buzzing — top users get the recognition they deserve.
+        The bot automatically ranks members by voice channel time. Simple way to recognize the most active people in your server.
     </text>
     
     <imgText position="right" src="/images/cat/img2.png">
-        Reward your members for their time! Each hour in a voice channel earns points that can be spent in your custom shop. Transform engagement into tangible rewards.
+        Members earn points for every hour in VC, which they can spend in a custom shop. Basically turns participation into rewards.
     </imgText>
     
     <imgText position="left" src="/images/cat/img3.png">
-        Shop perks include private voice channels, exclusive in-zone playtime, and other special items. Keep your community engaged and rewarded with a fully customizable reward system!
+        The shop has stuff like private voice channels, special playtime access, and other perks you can customize. Makes it easy to keep your community active.
     </imgText>
 `
 
 const expenseContent = `
     <text>
-    Expense Tracker — a sleek mobile app designed to help you track your spending, manage budgets, and stay on top of your finances effortlessly.
+    Expense Tracker is a mobile app for managing personal finances. Track spending, set budgets, and see where your money's going.
     </text>
     
     <imgText position="left" src="/images/expenseTracker/img1.png">
-        Keep all your expenses in one place — categorize transactions, view spending trends, and monitor where your money goes with intuitive organization.
+        Categorize expenses, check spending trends, and keep everything organized in one place. Makes it easier to see spending patterns.
     </imgText>
     
     <heading>
@@ -106,18 +112,18 @@ const expenseContent = `
     </heading>
     
     <text>
-        Set monthly budgets for different categories and get alerts when you're approaching your limits. Take control of your finances without stress.
+        Set monthly budgets for different categories and get alerts when you're getting close to your limit. Helps stay on track without overthinking it.
     </text>
     
     <imgText position="right" src="/images/expenseTracker/img2.png">
-        Visual charts and graphs help you quickly understand your spending habits and make smarter decisions. Track every expense on the go — add transactions in seconds, snap receipts, and sync across all your devices seamlessly.
+        Charts and graphs make it clear where your money's going. Add expenses quickly, snap photos of receipts, and everything syncs across devices.
     </imgText>
     
     <imgText position="left" src="/images/expenseTracker/img3.png">
-        Earn insights with smart reports — see where you can save, identify trends, and set financial goals to stay ahead. The app learns your patterns and provides personalized recommendations.
+        The app generates reports showing where you could save money and helps identify spending patterns. Also suggests ways to hit financial goals based on your habits.
     </imgText>
 `
 
 
 
-export { voltContent, epsilonContent, discordBotContent,expenseContent }
+export { voltContent, epsilonContent, discordBotContent, expenseContent }
