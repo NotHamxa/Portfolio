@@ -19,7 +19,7 @@ export default function ProjectDetailPage() {
             logo: "/images/volt/logo.png",
             content: voltContent,
             downloadUrl: {
-                "windows": "https://github.com/NotHamxa/Volt/releases/download/v1.0.3/Volt-Setup-1.0.3.exe"
+                "windows": "https://github.com/NotHamxa/Volt/releases/download/v1.1.1/Volt-Setup-1.1.1.exe"
             },
             githubUrl: [
                 {
