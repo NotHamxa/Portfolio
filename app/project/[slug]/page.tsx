@@ -68,18 +68,17 @@ export default function ProjectDetailPage() {
         return () => window.removeEventListener("scroll", handleScroll)
     }, [])
 
-    // Loading
     if (data === undefined) {
         return (
             <div className="min-h-screen bg-background flex items-center justify-center">
-                <div className="text-muted-foreground text-sm">Loading...</div>
+                <div className="text-muted-foreground text-sm font-mono">Loading...</div>
             </div>
         )
     }
 
     if (data === null) return <NotFound />
 
-    const { title, logo, content, downloadUrl, githubUrl } = data
+    const { title, logo, content, downloadUrl, githubUrl, date } = data
 
     const parseBlocks = (raw: string) => {
         const blocks: {
@@ -128,7 +127,7 @@ export default function ProjectDetailPage() {
                         <span key={idx}>{part}</span>
                     ) : (
                         <a key={idx} href={part.href} target="_blank" rel="noopener noreferrer"
-                            className="text-primary hover:text-primary/80 underline underline-offset-4 transition-colors font-medium">
+                            className="text-foreground underline underline-offset-4 decoration-border hover:decoration-foreground transition-colors">
                             {part.label}
                         </a>
                     )
@@ -144,28 +143,28 @@ export default function ProjectDetailPage() {
             <DownloadModal visible={downloadModalOpen} setVisible={setDownloadModalOpen} links={downloadUrl} />
             <GithubModal visible={githubModalOpen} setVisible={setGithubModalOpen} repos={githubUrl || []} />
 
-            {/* Floating Header */}
+            {/* Sticky floating header */}
             <div className={`fixed left-0 right-0 top-0 z-50 px-4 sm:px-6 lg:px-8 pt-4 transition-all duration-500 ease-out ${showStickyHeader ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"}`}>
                 <div className="max-w-7xl mx-auto">
                     <div className="flex items-center justify-between gap-4 rounded-2xl border border-border bg-background/80 backdrop-blur-md px-4 sm:px-6 py-3 shadow-lg">
                         <div className="flex items-center gap-3">
                             {logo && (
-                                <div className="relative w-8 h-8 rounded-md overflow-hidden border border-border">
+                                <div className="relative w-7 h-7 rounded-md overflow-hidden border border-border shrink-0">
                                     <Image src={logo} alt={`${title} logo`} fill className="object-contain p-1" />
                                 </div>
                             )}
-                            <span className="text-lg font-medium tracking-tight">{title}</span>
+                            <span className="text-sm font-medium tracking-tight">{title}</span>
                         </div>
                         <div className="flex gap-2">
                             {downloadUrl && (
                                 <Button variant="outline" size="sm" className="gap-2" onClick={() => setDownloadModalOpen(true)}>
-                                    <Download className="w-4 h-4" />
+                                    <Download className="w-3.5 h-3.5" />
                                     <span className="hidden sm:inline">Download</span>
                                 </Button>
                             )}
                             {githubUrl && githubUrl.length > 0 && (
                                 <Button variant="outline" size="sm" className="gap-2" onClick={handleGithubClick}>
-                                    <GithubIcon className="w-4 h-4" />
+                                    <GithubIcon className="w-3.5 h-3.5" />
                                     <span className="hidden sm:inline">GitHub</span>
                                 </Button>
                             )}
@@ -175,56 +174,70 @@ export default function ProjectDetailPage() {
             </div>
 
             <div className="min-h-screen bg-background">
-                {/* Hero Section */}
-                <div className="relative overflow-hidden bg-linear-to-b from-muted/50 to-background">
-                    <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]" />
-                    <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-24 sm:py-32">
-                        <div ref={titleRef} className="relative">
-                            <Button variant="ghost" onClick={() => router.back()} className="mb-8 gap-2 hover:gap-3 transition-all">
+                {/* Hero */}
+                <div className="border-b border-border">
+                    <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12 pt-16 sm:pt-24 pb-12 sm:pb-14">
+                        <div ref={titleRef}>
+                            {/* Back */}
+                            <Button
+                                variant="ghost"
+                                onClick={() => router.back()}
+                                className="-ml-3 mb-10 gap-2 hover:gap-3 transition-all text-muted-foreground hover:text-foreground"
+                            >
                                 <ArrowLeft className="w-4 h-4" />
-                                Back to Projects
+                                Back
                             </Button>
 
-                            <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12">
+                            {/* Meta label */}
+                            <p className="text-xs font-mono text-muted-foreground tracking-widest mb-5 uppercase">
+                                Project{date ? ` / ${date}` : ""}
+                            </p>
+
+                            {/* Title */}
+                            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-medium tracking-tight leading-[1.05] mb-10">
+                                {title}
+                            </h1>
+
+                            {/* Divider */}
+                            <div className="h-px w-full bg-border mb-8" />
+
+                            {/* Logo + Actions row */}
+                            <div className="flex items-center gap-4">
                                 {logo && (
-                                    <div className="relative w-24 h-24 lg:w-32 lg:h-32 rounded-2xl overflow-hidden bg-card border border-border shadow-2xl mx-auto lg:mx-0">
-                                        <Image src={logo} alt={`${title} logo`} fill className="object-contain p-4" />
+                                    <div className="relative w-9 h-9 rounded-lg overflow-hidden border border-border bg-muted/20 shrink-0">
+                                        <Image src={logo} alt={`${title} logo`} fill className="object-contain p-1.5" />
                                     </div>
                                 )}
-                                <div className="flex-1 text-center lg:text-left">
-                                    <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6">{title}</h1>
-                                    <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
-                                        {downloadUrl && (
-                                            <Button size="lg" className="gap-2 shadow-lg hover:shadow-xl transition-shadow" onClick={() => setDownloadModalOpen(true)}>
-                                                <Download className="w-5 h-5" /> Download
-                                            </Button>
-                                        )}
-                                        {githubUrl && githubUrl.length > 0 && (
-                                            <Button variant="outline" size="lg" className="gap-2" onClick={handleGithubClick}>
-                                                <GithubIcon className="w-5 h-5" />
-                                                View on GitHub
-                                            </Button>
-                                        )}
-                                    </div>
+                                <div className="flex gap-2 ml-auto">
+                                    {downloadUrl && (
+                                        <Button variant="outline" size="sm" className="gap-2" onClick={() => setDownloadModalOpen(true)}>
+                                            <Download className="w-4 h-4" />
+                                            Download
+                                        </Button>
+                                    )}
+                                    {githubUrl && githubUrl.length > 0 && (
+                                        <Button variant="outline" size="sm" className="gap-2" onClick={handleGithubClick}>
+                                            <GithubIcon className="w-4 h-4" />
+                                            GitHub
+                                        </Button>
+                                    )}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Content Section */}
-                <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-16 lg:py-24">
-                    <div className="space-y-16 lg:space-y-24">
+                {/* Content blocks */}
+                <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12 py-16 lg:py-24">
+                    <div className="space-y-14 lg:space-y-20">
                         {blocks.map((block, idx) => {
                             if (block.type === "text") {
                                 return (
                                     <div key={idx} ref={(el) => { sectionsRef.current[idx] = el }}
                                         className="opacity-0 translate-y-8 transition-all duration-700">
-                                        <div className="prose prose-lg max-w-none">
-                                            <p className="text-lg leading-relaxed text-muted-foreground">
-                                                {renderTextWithLinks(block.content)}
-                                            </p>
-                                        </div>
+                                        <p className="text-base sm:text-lg leading-[1.85] text-muted-foreground max-w-2xl">
+                                            {renderTextWithLinks(block.content)}
+                                        </p>
                                     </div>
                                 )
                             }
@@ -233,10 +246,9 @@ export default function ProjectDetailPage() {
                                 return (
                                     <div key={idx} ref={(el) => { sectionsRef.current[idx] = el }}
                                         className="opacity-0 translate-y-8 transition-all duration-700">
-                                        <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6 bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                                        <h2 className="text-2xl sm:text-3xl font-medium tracking-tight pl-4 border-l-2 border-foreground">
                                             {block.content}
                                         </h2>
-                                        <div className="h-1 w-20 bg-primary rounded-full" />
                                     </div>
                                 )
                             }
@@ -245,14 +257,15 @@ export default function ProjectDetailPage() {
                                 return (
                                     <div key={idx} ref={(el) => { sectionsRef.current[idx] = el }}
                                         className="opacity-0 translate-y-8 transition-all duration-700">
-                                        <div className="relative w-full rounded-3xl overflow-hidden border border-border shadow-2xl bg-card/50 backdrop-blur-sm flex items-center justify-center p-8">
-                                            <div className="relative w-full max-w-5xl">
-                                                <Image src={block.content} alt={`Project screenshot ${idx + 1}`}
-                                                    width={1920} height={1080}
-                                                    className="w-full h-auto object-contain rounded-lg"
-                                                    style={{ maxHeight: '70vh' }}
-                                                />
-                                            </div>
+                                        <div className="w-full rounded-2xl overflow-hidden border border-border bg-muted/10">
+                                            <Image
+                                                src={block.content}
+                                                alt={`Project screenshot ${idx + 1}`}
+                                                width={1920}
+                                                height={1080}
+                                                className="w-full h-auto object-contain"
+                                                style={{ maxHeight: '70vh' }}
+                                            />
                                         </div>
                                     </div>
                                 )
@@ -264,21 +277,20 @@ export default function ProjectDetailPage() {
                                     <div key={idx} ref={(el) => { sectionsRef.current[idx] = el }}
                                         className="opacity-0 translate-y-8 transition-all duration-700">
                                         <div className={`grid lg:grid-cols-2 gap-8 lg:gap-12 items-center ${isImageLeft ? "" : "lg:grid-flow-dense"}`}>
-                                            <div className={`relative rounded-2xl overflow-hidden border border-border shadow-xl bg-card/50 backdrop-blur-sm flex items-center justify-center p-6 ${isImageLeft ? "" : "lg:col-start-2"}`}>
-                                                <div className="relative w-full max-w-md mx-auto">
-                                                    <Image src={block.imgSrc || ""} alt="Feature illustration"
-                                                        width={800} height={600}
-                                                        className="w-full h-auto object-contain rounded-lg"
-                                                        style={{ maxHeight: '600px' }}
-                                                    />
-                                                </div>
+                                            <div className={`w-full rounded-xl overflow-hidden border border-border bg-muted/10 ${isImageLeft ? "" : "lg:col-start-2"}`}>
+                                                <Image
+                                                    src={block.imgSrc || ""}
+                                                    alt="Feature illustration"
+                                                    width={800}
+                                                    height={600}
+                                                    className="w-full h-auto object-contain"
+                                                    style={{ maxHeight: '500px' }}
+                                                />
                                             </div>
                                             <div className={isImageLeft ? "" : "lg:col-start-1 lg:row-start-1"}>
-                                                <div className="prose prose-lg max-w-none">
-                                                    <p className="text-lg leading-relaxed text-muted-foreground">
-                                                        {renderTextWithLinks(block.content)}
-                                                    </p>
-                                                </div>
+                                                <p className="text-base sm:text-lg leading-[1.85] text-muted-foreground">
+                                                    {renderTextWithLinks(block.content)}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -289,12 +301,15 @@ export default function ProjectDetailPage() {
                                 return (
                                     <div key={idx} ref={(el) => { sectionsRef.current[idx] = el }}
                                         className="opacity-0 translate-y-8 transition-all duration-700">
-                                        <Button asChild variant="outline" size="lg" className="gap-2 group">
-                                            <a href={block.href} target="_blank" rel="noopener noreferrer">
-                                                {block.content}
-                                                <ExternalLink className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                                            </a>
-                                        </Button>
+                                        <a
+                                            href={block.href}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="group inline-flex items-center gap-3 px-5 py-3 border border-border rounded-lg hover:border-foreground transition-all duration-300 text-sm font-medium"
+                                        >
+                                            {block.content}
+                                            <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
+                                        </a>
                                     </div>
                                 )
                             }
