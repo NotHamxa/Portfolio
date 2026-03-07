@@ -83,8 +83,8 @@ export default function ProjectForm({ initial, mode }: Props) {
             router.push('/admin/projects')
             router.refresh()
         } else {
-            const data = await res.json()
-            setError(data.error ?? 'Something went wrong')
+            const data = await res.json().catch(() => ({}))
+            setError((data as { error?: string }).error ?? `Request failed (${res.status})`)
         }
         setSaving(false)
     }

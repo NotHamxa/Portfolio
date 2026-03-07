@@ -11,11 +11,16 @@ async function requireAdmin(): Promise<boolean> {
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     if (!await requireAdmin()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    const { id } = await params
-    const body = await req.json()
-    const project = await updateProject(id, body)
-    if (!project) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    return NextResponse.json(project)
+    try {
+        const { id } = await params
+        const body = await req.json()
+        const project = await updateProject(id, body)
+        if (!project) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+        return NextResponse.json(project)
+    } catch (err) {
+        const message = err instanceof Error ? err.message : 'Internal server error'
+        return NextResponse.json({ error: message }, { status: 500 })
+    }
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
