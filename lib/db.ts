@@ -1,16 +1,30 @@
-import { Redis } from '@upstash/redis'
+import { MongoClient, Collection } from 'mongodb'
 import { ProjectType } from '@/models/projectContent'
 
-function getRedis() {
-    const url = process.env.UPSTASH_REDIS_REST_URL
-    const token = process.env.UPSTASH_REDIS_REST_TOKEN
-    if (!url || !token) return null
-    return new Redis({ url, token })
+// --- MongoDB client singleton ---
+const globalWithMongo = global as typeof global & { _mongoClient?: MongoClient }
+
+async function getCollection(): Promise<Collection | null> {
+    const uri = process.env.MONGODB_URI
+    if (!uri) return null
+
+    if (!globalWithMongo._mongoClient) {
+        globalWithMongo._mongoClient = new MongoClient(uri)
+        await globalWithMongo._mongoClient.connect()
+    }
+
+    return globalWithMongo._mongoClient.db('Portfolio').collection('projects')
 }
 
-const PROJECTS_KEY = 'portfolio:projects'
+// --- In-memory cache ---
+let projectsCache: ProjectType[] | null = null
 
-const seedProjects: ProjectType[] = [
+function clearCache() {
+    projectsCache = null
+}
+
+// --- Seed data ---
+export const seedProjects: ProjectType[] = [
     {
         id: 'volt',
         title: 'Volt',
@@ -224,22 +238,40 @@ The app generates reports showing where you could save money and helps identify 
     },
 ]
 
-export async function getProjects(): Promise<ProjectType[]> {
-    const redis = getRedis()
-    if (!redis) return seedProjects
+// Strip MongoDB _id before returning
+function toProject(doc: Record<string, unknown>): ProjectType {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { _id, ...rest } = doc
+    return rest as ProjectType
+}
 
-    const projects = await redis.get<ProjectType[]>(PROJECTS_KEY)
-    if (!projects) {
-        await redis.set(PROJECTS_KEY, seedProjects)
+export async function getProjects(): Promise<ProjectType[]> {
+    if (projectsCache) return projectsCache
+
+    const col = await getCollection()
+    if (!col) {
+        projectsCache = seedProjects
         return seedProjects
     }
-    return projects
+
+    const docs = await col.find({}).toArray()
+    if (docs.length === 0) {
+        await col.insertMany(seedProjects as Record<string, unknown>[])
+        projectsCache = seedProjects
+        return seedProjects
+    }
+
+    projectsCache = docs.map(toProject)
+    return projectsCache
 }
 
 export async function saveProjects(projects: ProjectType[]): Promise<void> {
-    const redis = getRedis()
-    if (!redis) throw new Error('Redis not configured')
-    await redis.set(PROJECTS_KEY, projects)
+    const col = await getCollection()
+    if (!col) throw new Error('MongoDB not configured')
+
+    await col.deleteMany({})
+    await col.insertMany(projects as Record<string, unknown>[])
+    projectsCache = projects
 }
 
 export async function getProject(slug: string): Promise<ProjectType | null> {
@@ -251,7 +283,11 @@ export async function createProject(data: Omit<ProjectType, 'id'>): Promise<Proj
     const projects = await getProjects()
     const id = data.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
     const project: ProjectType = { id, ...data }
-    await saveProjects([...projects, project])
+
+    const col = await getCollection()
+    if (!col) throw new Error('MongoDB not configured')
+    await col.insertOne(project as Record<string, unknown>)
+    projectsCache = [...projects, project]
     return project
 }
 
@@ -259,16 +295,27 @@ export async function updateProject(id: string, updates: Partial<Omit<ProjectTyp
     const projects = await getProjects()
     const idx = projects.findIndex(p => p.id === id)
     if (idx === -1) return null
-    projects[idx] = { ...projects[idx], ...updates }
-    await saveProjects(projects)
-    return projects[idx]
+
+    const updated = { ...projects[idx], ...updates }
+
+    const col = await getCollection()
+    if (!col) throw new Error('MongoDB not configured')
+    await col.replaceOne({ id }, updated as Record<string, unknown>)
+
+    projects[idx] = updated
+    projectsCache = [...projects]
+    return updated
 }
 
 export async function deleteProject(id: string): Promise<boolean> {
     const projects = await getProjects()
     const filtered = projects.filter(p => p.id !== id)
     if (filtered.length === projects.length) return false
-    await saveProjects(filtered)
+
+    const col = await getCollection()
+    if (!col) throw new Error('MongoDB not configured')
+    await col.deleteOne({ id })
+    projectsCache = filtered
     return true
 }
 
