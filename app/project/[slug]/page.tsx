@@ -127,7 +127,7 @@ export default function ProjectDetailPage() {
                         <span key={idx}>{part}</span>
                     ) : (
                         <a key={idx} href={part.href} target="_blank" rel="noopener noreferrer"
-                            className="text-foreground underline underline-offset-4 decoration-border hover:decoration-foreground transition-colors">
+                            className="text-foreground underline underline-offset-4 decoration-accent/50 hover:decoration-accent transition-colors">
                             {part.label}
                         </a>
                     )
@@ -235,7 +235,7 @@ export default function ProjectDetailPage() {
                                 return (
                                     <div key={idx} ref={(el) => { sectionsRef.current[idx] = el }}
                                         className="opacity-0 translate-y-8 transition-all duration-700">
-                                        <p className="text-base sm:text-lg leading-[1.85] text-muted-foreground max-w-2xl">
+                                        <p className="text-base sm:text-lg leading-[1.75] text-muted-foreground max-w-2xl">
                                             {renderTextWithLinks(block.content)}
                                         </p>
                                     </div>
@@ -288,7 +288,7 @@ export default function ProjectDetailPage() {
                                                 />
                                             </div>
                                             <div className={isImageLeft ? "" : "lg:col-start-1 lg:row-start-1"}>
-                                                <p className="text-base sm:text-lg leading-[1.85] text-muted-foreground">
+                                                <p className="text-base sm:text-lg leading-[1.75] text-muted-foreground">
                                                     {renderTextWithLinks(block.content)}
                                                 </p>
                                             </div>

@@ -1,7 +1,5 @@
 "use client"
 
-
-
 import {RefObject} from "react";
 
 interface Props {
@@ -25,7 +23,7 @@ export default function Header({sectionsRef}:Props){
                         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight">
                             Hamza
                             <br />
-                            <span className="text-muted-foreground">Ahmed</span>
+                            <span className="font-extralight text-muted-foreground">Ahmed</span>
                         </h1>
                     </div>
 
@@ -38,10 +36,11 @@ export default function Header({sectionsRef}:Props){
                         </p>
 
                         <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-sm text-muted-foreground">
-                            {/*<div className="flex items-center gap-2">*/}
-                            {/*    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>*/}
-                            {/*    Available for work*/}
-                            {/*</div>*/}
+                            <div className="flex items-center gap-2">
+                                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                                Available for work
+                            </div>
+                            <div className="hidden sm:block w-px h-3 bg-border"></div>
                             <div>Pakistan</div>
                         </div>
                     </div>
@@ -53,17 +52,18 @@ export default function Header({sectionsRef}:Props){
                         <div className="space-y-2">
                             <div className="text-foreground">Student</div>
                             <div className="text-muted-foreground">@ NUST, SEECS</div>
-                            <div className="text-xs text-muted-foreground">2025      — Present</div>
+                            <div className="text-xs text-muted-foreground">2025 — Present</div>
                         </div>
                     </div>
 
                     <div className="space-y-4">
                         <div className="text-sm text-muted-foreground font-mono">FOCUS</div>
                         <div className="flex flex-wrap gap-2">
-                            {skills.map((skill) => (
+                            {skills.map((skill, index) => (
                                 <span
                                     key={skill}
-                                    className="px-3 py-1 text-xs border border-border rounded-full hover:border-muted-foreground/50 transition-colors duration-300"
+                                    className="stagger-child px-3 py-1 text-xs border border-border rounded-full bg-muted/40 backdrop-blur-sm hover:bg-foreground hover:text-background hover:border-foreground transition-all duration-300 cursor-default"
+                                    style={{ animationDelay: `${index * 60}ms` }}
                                 >
                       {skill}
                     </span>

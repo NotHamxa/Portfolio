@@ -37,7 +37,7 @@ export default function ExperienceSection({sectionsRef}: Props) {
             ref={(el) => {
                 (sectionsRef.current[1] = el)
             }}
-            className="min-h-screen py-20 sm:py-32 opacity-0"
+            className="py-32 lg:py-40 opacity-0"
         >
             <div className="space-y-12 sm:space-y-16">
                 <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
@@ -49,7 +49,8 @@ export default function ExperienceSection({sectionsRef}: Props) {
                     {experiences.map((job, index) => (
                         <div
                             key={index}
-                            className="group grid lg:grid-cols-12 gap-4 sm:gap-8 py-6 sm:py-8 border-b border-border/50 hover:border-border transition-colors duration-500"
+                            className="group grid lg:grid-cols-12 gap-4 sm:gap-8 py-6 sm:py-8 border-b border-border/50 hover:border-accent/50 transition-colors duration-500"
+                            style={{ animationDelay: `${index * 100}ms` }}
                         >
                             <div className="lg:col-span-2">
                                 <div className="text-xl sm:text-2xl font-light text-muted-foreground group-hover:text-foreground transition-colors duration-500">
