@@ -8,7 +8,6 @@ import ProjectsSection from "@/sections/projects";
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState("")
-  const [scrollProgress, setScrollProgress] = useState(0)
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
 
   useEffect(() => {
@@ -31,22 +30,10 @@ export default function Home() {
     return () => observer.disconnect()
   }, [])
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight
-      setScrollProgress(docHeight > 0 ? (scrollTop / docHeight) * 100 : 0)
-    }
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
 
 
   return (
     <div className="min-h-screen bg-background text-foreground relative">
-      {/* Scroll progress bar */}
-      <div className="scroll-progress" style={{ width: `${scrollProgress}%` }} />
-
       <nav className="fixed left-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block">
         <div className="flex flex-col gap-4">
           {["intro", "work", "thoughts", "connect"].map((section) => (

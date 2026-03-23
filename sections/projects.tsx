@@ -1,9 +1,9 @@
 "use client"
 
 import { RefObject, useEffect, useState } from "react"
-import Link from "next/link"
 import Image from "next/image"
 import { ProjectType } from "@/models/projectContent"
+import { usePageTransition } from "@/components/page-transition"
 
 interface Props {
     sectionsRef: RefObject<(HTMLElement | null)[]>
@@ -26,6 +26,7 @@ function ProjectSkeleton() {
 }
 
 export default function ProjectsSection({ sectionsRef }: Props) {
+    const { push } = usePageTransition()
     const [projects, setProjects] = useState<ProjectType[]>([])
     const [loading, setLoading] = useState(true)
 
@@ -67,9 +68,9 @@ export default function ProjectsSection({ sectionsRef }: Props) {
                 {!loading && (
                     <div className="divide-y divide-border">
                         {projects.map((project, index) => (
-                            <Link
+                            <div
                                 key={project.id}
-                                href={`/project/${project.id}`}
+                                onClick={() => push(`/project/${project.id}`)}
                                 className="stagger-child group flex items-start gap-5 sm:gap-8 py-7 sm:py-9 transition-all duration-300 cursor-pointer hover:-translate-y-0.5 hover:bg-muted/30 rounded-lg px-2 -mx-2"
                                 style={{ animationDelay: `${index * 80}ms` }}
                             >
@@ -116,7 +117,7 @@ export default function ProjectsSection({ sectionsRef }: Props) {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                     </svg>
                                 </div>
-                            </Link>
+                            </div>
                         ))}
                     </div>
                 )}
