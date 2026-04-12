@@ -3,6 +3,8 @@ import type { Metadata } from "next"
 import {Inter} from "next/font/google"
 import "./globals.css"
 import ThemeWrapper from "@/components/theme-provider";
+import {Analytics} from "@vercel/analytics/next";
+import {SpeedInsights} from "@vercel/speed-insights/next";
 
 const geist = Inter({
   subsets: ["latin"],
@@ -23,6 +25,8 @@ export default function RootLayout({
   return (
       <html lang="en">
           <body className={geist.className}>
+                <Analytics/>
+                <SpeedInsights/>
                 <ThemeWrapper>{children}</ThemeWrapper>
           </body>
       </html>

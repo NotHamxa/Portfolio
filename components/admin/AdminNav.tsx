@@ -27,6 +27,12 @@ export default function AdminNav() {
                         >
                             Projects
                         </Link>
+                        <Link
+                            href="/admin/media"
+                            className={`text-sm transition-colors ${pathname.startsWith('/admin/media') ? 'text-foreground font-medium' : 'text-muted-foreground hover:text-foreground'}`}
+                        >
+                            Media
+                        </Link>
                     </nav>
                 </div>
                 <Button variant="ghost" size="sm" onClick={handleLogout}>

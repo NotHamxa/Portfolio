@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import ContentEditor from './ContentEditor'
+import ImageUpload from './ImageUpload'
 import { ProjectType, GithubRepo } from '@/models/projectContent'
 import { Plus, Trash2 } from 'lucide-react'
 
@@ -131,12 +132,11 @@ export default function ProjectForm({ initial, mode }: Props) {
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="logo">Logo path</Label>
-                <Input
-                    id="logo"
+                <Label>Logo</Label>
+                <ImageUpload
                     value={logo}
-                    onChange={e => setLogo(e.target.value)}
-                    placeholder="/images/project/logo.png  (leave blank for none)"
+                    onChange={setLogo}
+                    folder="logos"
                 />
             </div>
 

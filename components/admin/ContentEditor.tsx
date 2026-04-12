@@ -1,7 +1,14 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import Image from 'next/image'
+import { Button } from '@/components/ui/button'
+import { Upload, Loader2, ImageIcon, FolderOpen, ArrowLeftRight, X } from 'lucide-react'
+import {
+    Dialog, DialogContent,
+} from '@/components/ui/dialog'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import ImageBrowser from './ImageBrowser'
 
 interface Props {
     value: string
@@ -111,71 +118,391 @@ function ContentPreview({ content }: { content: string }) {
     )
 }
 
+/** Parse all image src positions out of content for the visual overlay */
+interface ImageRef {
+    url: string
+    start: number
+    end: number
+    tag: 'img' | 'imgText'
+}
+
+function findImageRefs(content: string): ImageRef[] {
+    const refs: ImageRef[] = []
+
+    const imgRe = /<img>([\s\S]*?)<\/img>/g
+    let m
+    while ((m = imgRe.exec(content)) !== null) {
+        const url = m[1].trim()
+        const innerStart = m.index + '<img>'.length
+        const leadingWs = m[1].length - m[1].trimStart().length
+        refs.push({ url, start: innerStart + leadingWs, end: innerStart + leadingWs + url.length, tag: 'img' })
+    }
+
+    const srcRe = /<imgText[^>]*\ssrc="([^"]*)"[^>]*>/g
+    while ((m = srcRe.exec(content)) !== null) {
+        const url = m[1]
+        const srcAttrStart = m[0].indexOf('src="') + 'src="'.length
+        const absStart = m.index + srcAttrStart
+        refs.push({ url, start: absStart, end: absStart + url.length, tag: 'imgText' })
+    }
+
+    return refs
+}
+
 const TAGS_REFERENCE = `Available tags:
 
 <text>Your paragraph text here</text>
 
 <heading>Section Title</heading>
 
-<img>/images/project/image.png</img>
+<img>https://blob-url.vercel-storage.com/image.png</img>
 
-<imgText position="left" src="/images/project/img.png">
+<imgText position="left" src="https://blob-url.vercel-storage.com/image.png">
   Text alongside the image
 </imgText>
 
-<imgText position="right" src="/images/project/img.png">
+<imgText position="right" src="https://blob-url.vercel-storage.com/image.png">
   Text alongside the image (image on right)
 </imgText>
 
-<link href="https://example.com">Link label</link>`
+<link href="https://example.com">Link label</link>
+
+Tip: Use the toolbar to upload new images or browse existing ones.
+     Click on image thumbnails below the editor to swap them.`
+
+type InsertMode = 'img' | 'imgText-left' | 'imgText-right'
 
 export default function ContentEditor({ value, onChange }: Props) {
     const [tab, setTab] = useState<'edit' | 'preview' | 'reference'>('edit')
+    const [uploading, setUploading] = useState(false)
+    const [insertMode, setInsertMode] = useState<InsertMode | null>(null)
+    const [error, setError] = useState('')
+    const textareaRef = useRef<HTMLTextAreaElement>(null)
+    const fileInputRef = useRef<HTMLInputElement>(null)
+
+    // Image browser state
+    const [browserOpen, setBrowserOpen] = useState(false)
+    const [browserCallback, setBrowserCallback] = useState<((url: string) => void) | null>(null)
+
+    // Lightbox state
+    const [lightboxUrl, setLightboxUrl] = useState<string | null>(null)
+    const [lightboxRef, setLightboxRef] = useState<ImageRef | null>(null)
+
+    function openBrowserForInsert(mode: InsertMode) {
+        setBrowserCallback(() => (url: string) => {
+            let tag: string
+            if (mode === 'img') {
+                tag = `<img>${url}</img>`
+            } else {
+                const pos = mode === 'imgText-left' ? 'left' : 'right'
+                tag = `<imgText position="${pos}" src="${url}">\nYour description here\n</imgText>`
+            }
+            insertAtCursor(tag)
+        })
+        setBrowserOpen(true)
+    }
+
+    function openBrowserForReplace(ref: ImageRef) {
+        setBrowserCallback(() => (newUrl: string) => {
+            const newValue = value.substring(0, ref.start) + newUrl + value.substring(ref.end)
+            onChange(newValue)
+        })
+        setBrowserOpen(true)
+    }
+
+    const insertAtCursor = useCallback((tag: string) => {
+        const textarea = textareaRef.current
+        if (!textarea) {
+            onChange(value + '\n\n' + tag)
+            return
+        }
+
+        const start = textarea.selectionStart
+        const end = textarea.selectionEnd
+        const before = value.substring(0, start)
+        const after = value.substring(end)
+
+        const prefix = before.length > 0 && !before.endsWith('\n\n') ? (before.endsWith('\n') ? '\n' : '\n\n') : ''
+        const suffix = after.length > 0 && !after.startsWith('\n\n') ? (after.startsWith('\n') ? '\n' : '\n\n') : ''
+
+        const newValue = before + prefix + tag + suffix + after
+        onChange(newValue)
+
+        requestAnimationFrame(() => {
+            const newPos = (before + prefix + tag).length
+            textarea.selectionStart = textarea.selectionEnd = newPos
+            textarea.focus()
+        })
+    }, [value, onChange])
+
+    const uploadAndInsert = useCallback(async (file: File, mode: InsertMode) => {
+        if (!file.type.startsWith('image/')) {
+            setError('File must be an image')
+            return
+        }
+
+        setUploading(true)
+        setError('')
+
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('folder', 'content')
+
+        try {
+            const res = await fetch('/api/admin/upload', { method: 'POST', body: formData })
+            const data = await res.json()
+
+            if (!res.ok) {
+                setError(data.error || 'Upload failed')
+                return
+            }
+
+            const url = data.url
+            let tag: string
+
+            if (mode === 'img') {
+                tag = `<img>${url}</img>`
+            } else {
+                const pos = mode === 'imgText-left' ? 'left' : 'right'
+                tag = `<imgText position="${pos}" src="${url}">\nYour description here\n</imgText>`
+            }
+
+            insertAtCursor(tag)
+        } catch {
+            setError('Upload failed')
+        } finally {
+            setUploading(false)
+        }
+    }, [insertAtCursor])
+
+    function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0]
+        if (file && insertMode) {
+            uploadAndInsert(file, insertMode)
+        }
+        e.target.value = ''
+        setInsertMode(null)
+    }
+
+    function triggerUpload(mode: InsertMode) {
+        setInsertMode(mode)
+        fileInputRef.current?.click()
+    }
+
+    function handleDrop(e: React.DragEvent) {
+        e.preventDefault()
+        const file = e.dataTransfer.files[0]
+        if (file) uploadAndInsert(file, 'img')
+    }
+
+    function handlePaste(e: React.ClipboardEvent) {
+        const file = e.clipboardData.files[0]
+        if (file) {
+            e.preventDefault()
+            uploadAndInsert(file, 'img')
+        }
+    }
+
+    const imageRefs = findImageRefs(value)
 
     return (
         <div className="border border-border rounded-lg overflow-hidden">
-            {/* Tab bar */}
-            <div className="flex border-b border-border bg-muted/30">
-                {(['edit', 'preview', 'reference'] as const).map(t => (
-                    <button
-                        key={t}
-                        type="button"
-                        onClick={() => setTab(t)}
-                        className={`px-4 py-2 text-sm font-medium capitalize transition-colors ${
-                            tab === t
-                                ? 'text-foreground border-b-2 border-foreground -mb-px bg-background'
-                                : 'text-muted-foreground hover:text-foreground'
-                        }`}
-                    >
-                        {t}
-                    </button>
-                ))}
+            {/* Tab bar + toolbar combined */}
+            <div className="flex items-center justify-between border-b border-border bg-muted/30">
+                <div className="flex">
+                    {(['edit', 'preview', 'reference'] as const).map(t => (
+                        <button
+                            key={t}
+                            type="button"
+                            onClick={() => setTab(t)}
+                            className={`px-4 py-2 text-sm font-medium capitalize transition-colors ${
+                                tab === t
+                                    ? 'text-foreground border-b-2 border-foreground -mb-px bg-background'
+                                    : 'text-muted-foreground hover:text-foreground'
+                            }`}
+                        >
+                            {t}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Compact toolbar — only visible on edit tab */}
+                {tab === 'edit' && (
+                    <div className="flex items-center gap-1.5 pr-3">
+                        <Button type="button" variant="ghost" size="icon" disabled={uploading}
+                            onClick={() => triggerUpload('img')} className="w-7 h-7" title="Upload image">
+                            <Upload className="w-3.5 h-3.5" />
+                        </Button>
+                        <Button type="button" variant="ghost" size="icon"
+                            onClick={() => openBrowserForInsert('img')} className="w-7 h-7" title="Browse images">
+                            <FolderOpen className="w-3.5 h-3.5" />
+                        </Button>
+                        <div className="w-px h-4 bg-border mx-0.5" />
+                        <Button type="button" variant="ghost" size="sm" disabled={uploading}
+                            onClick={() => triggerUpload('imgText-left')} className="gap-1 h-7 text-xs px-2" title="Image left + text">
+                            <ImageIcon className="w-3 h-3" /> L+T
+                        </Button>
+                        <Button type="button" variant="ghost" size="sm" disabled={uploading}
+                            onClick={() => triggerUpload('imgText-right')} className="gap-1 h-7 text-xs px-2" title="Image right + text">
+                            <ImageIcon className="w-3 h-3" /> R+T
+                        </Button>
+                        {uploading && <Loader2 className="w-3.5 h-3.5 animate-spin text-muted-foreground ml-1" />}
+                    </div>
+                )}
             </div>
+
+            {error && (
+                <div className="px-3 py-1.5 bg-destructive/10 border-b border-destructive/20">
+                    <p className="text-xs text-destructive">{error}</p>
+                </div>
+            )}
 
             {/* Edit */}
             {tab === 'edit' && (
-                <textarea
-                    value={value}
-                    onChange={e => onChange(e.target.value)}
-                    className="w-full min-h-96 p-4 font-mono text-sm bg-background text-foreground resize-y focus:outline-none"
-                    placeholder={`<text>\nYour intro paragraph here.\n</text>\n\n<heading>\nSection Title\n</heading>`}
-                    spellCheck={false}
-                />
+                <div>
+                    <textarea
+                        ref={textareaRef}
+                        value={value}
+                        onChange={e => onChange(e.target.value)}
+                        onDrop={handleDrop}
+                        onDragOver={e => e.preventDefault()}
+                        onPaste={handlePaste}
+                        className="w-full min-h-80 p-4 font-mono text-sm bg-background text-foreground resize-y focus:outline-none scrollbar-thin"
+                        placeholder={`<text>\nYour intro paragraph here.\n</text>\n\n<heading>Section Title</heading>`}
+                        spellCheck={false}
+                    />
+
+                    {/* Image strip — horizontal thumbnails below editor */}
+                    {imageRefs.length > 0 && (
+                        <div className="border-t border-border bg-muted/10 px-3 py-2.5">
+                            <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider mb-2">
+                                Images ({imageRefs.length}) — click to enlarge
+                            </p>
+                            <ScrollArea className="w-full">
+                                <div className="flex gap-2 pb-1">
+                                    {imageRefs.map((ref, i) => (
+                                        <div key={`${ref.start}-${i}`} className="shrink-0 w-24 rounded-md border border-border overflow-hidden hover:border-primary hover:ring-1 hover:ring-primary/30 transition-all group">
+                                            <button
+                                                type="button"
+                                                onClick={() => { setLightboxUrl(ref.url); setLightboxRef(ref) }}
+                                                className="relative w-full aspect-[4/3] bg-muted/30 cursor-zoom-in"
+                                                title="Click to enlarge"
+                                            >
+                                                <Image
+                                                    src={ref.url}
+                                                    alt={`Image ${i + 1}`}
+                                                    fill
+                                                    className="object-contain p-0.5"
+                                                    sizes="96px"
+                                                />
+                                            </button>
+                                            <div className="flex items-center justify-between px-1 py-0.5 bg-background">
+                                                <p className="text-[9px] text-muted-foreground truncate">
+                                                    {ref.tag === 'img' ? 'img' : 'imgText'} #{i + 1}
+                                                </p>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => openBrowserForReplace(ref)}
+                                                    className="text-muted-foreground hover:text-foreground transition-colors"
+                                                    title="Change image"
+                                                >
+                                                    <ArrowLeftRight className="w-2.5 h-2.5" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <ScrollBar orientation="horizontal" />
+                            </ScrollArea>
+                        </div>
+                    )}
+                </div>
             )}
 
             {/* Preview */}
             {tab === 'preview' && (
-                <div className="p-6 min-h-96 bg-background">
-                    <ContentPreview content={value} />
-                </div>
+                <ScrollArea className="h-[32rem] bg-background">
+                    <div className="p-6">
+                        <ContentPreview content={value} />
+                    </div>
+                </ScrollArea>
             )}
 
             {/* Reference */}
             {tab === 'reference' && (
-                <div className="p-4 min-h-96 bg-background">
-                    <pre className="font-mono text-sm text-muted-foreground whitespace-pre-wrap">{TAGS_REFERENCE}</pre>
-                </div>
+                <ScrollArea className="h-80 bg-background">
+                    <div className="p-4">
+                        <pre className="font-mono text-sm text-muted-foreground whitespace-pre-wrap">{TAGS_REFERENCE}</pre>
+                    </div>
+                </ScrollArea>
             )}
+
+            <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleFileSelect}
+            />
+
+            <ImageBrowser
+                open={browserOpen}
+                onClose={() => { setBrowserOpen(false); setBrowserCallback(null) }}
+                selectable
+                onSelect={(url) => {
+                    browserCallback?.(url)
+                    setBrowserCallback(null)
+                }}
+            />
+
+            {/* Lightbox dialog */}
+            <Dialog open={!!lightboxUrl} onOpenChange={v => { if (!v) { setLightboxUrl(null); setLightboxRef(null) } }}>
+                <DialogContent className="sm:max-w-3xl p-0 gap-0 overflow-hidden bg-black/95 border-none">
+                    <div className="relative flex items-center justify-center min-h-[50vh] max-h-[80vh]">
+                        {lightboxUrl && (
+                            <Image
+                                src={lightboxUrl}
+                                alt="Enlarged preview"
+                                width={1920}
+                                height={1080}
+                                className="w-full h-auto max-h-[80vh] object-contain"
+                            />
+                        )}
+                    </div>
+                    <div className="flex items-center justify-between px-4 py-3 bg-background border-t border-border">
+                        <p className="text-xs text-muted-foreground truncate max-w-md">
+                            {lightboxUrl ? new URL(lightboxUrl).pathname.slice(1) : ''}
+                        </p>
+                        <div className="flex gap-2">
+                            {lightboxRef && (
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    className="gap-1.5"
+                                    onClick={() => {
+                                        const ref = lightboxRef
+                                        setLightboxUrl(null)
+                                        setLightboxRef(null)
+                                        openBrowserForReplace(ref)
+                                    }}
+                                >
+                                    <ArrowLeftRight className="w-3.5 h-3.5" />
+                                    Change
+                                </Button>
+                            )}
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => { setLightboxUrl(null); setLightboxRef(null) }}
+                            >
+                                <X className="w-3.5 h-3.5" />
+                            </Button>
+                        </div>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }

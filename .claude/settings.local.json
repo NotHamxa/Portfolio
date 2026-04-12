@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm add:*)",
+      "Bash(pnpm:*)",
+      "Bash(mkdir:*)",
+      "Bash(npx tsc:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/admin/projects)",
+      "Bash(curl -s http://localhost:3000/api/admin/upload -X POST -w \"\\\\n%{http_code}\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/admin/media)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/api/admin/blobs)",
+      "Bash(curl -s http://localhost:3000/admin/media)",
+      "Bash(curl -s http://localhost:3000/project/volt)",
+      "Bash(curl -s http://localhost:3000/admin/media -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -s http://localhost:3000/api/admin/blobs -X PUT -H \"Content-Type: application/json\" -d '{\"folder\":\"test\"}' -w \"\\\\n%{http_code}\")",
+      "Bash(curl:*)",
+      "Bash(node:*)",
+      "Bash(npx tsx:*)"
+    ]
+  }
+}
