@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Footer from "@/components/footer"
+import PageTransition from "@/components/page-transition"
 
 export default function ThemeWrapper({ children }: { children: React.ReactNode }) {
     const [isDark, setIsDark] = useState(true)
@@ -13,11 +14,11 @@ export default function ThemeWrapper({ children }: { children: React.ReactNode }
     const toggleTheme = () => setIsDark(!isDark)
 
     return (
-        <>
+        <PageTransition>
             {children}
             <div className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-16">
                 <Footer isDark={isDark} toggleTheme={toggleTheme} />
             </div>
-        </>
+        </PageTransition>
     )
 }

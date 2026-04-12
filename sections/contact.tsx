@@ -23,10 +23,10 @@ export default function ContactSection({sectionsRef}: Props){
     return (
         <section id="connect" ref={(el) => {
             sectionsRef.current[3] = el
-        }} className="py-20 sm:py-32 opacity-0">
+        }} className="py-32 lg:py-40 opacity-0">
             <div className="grid lg:grid-cols-2 gap-12 sm:gap-16">
                 <div className="space-y-6 sm:space-y-8">
-                    <h2 className="text-3xl sm:text-4xl font-medium">Let's Connect</h2>
+                    <h2 className="text-3xl sm:text-4xl font-medium">Let&apos;s Connect</h2>
 
                     <div className="space-y-6">
                         <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
@@ -36,7 +36,7 @@ export default function ContactSection({sectionsRef}: Props){
                         <div className="space-y-4">
                             <Link
                                 href={`mailto:${email}`}
-                                className="group flex items-center gap-3 text-foreground hover:text-muted-foreground transition-colors duration-300"
+                                className="group flex items-center gap-3 text-foreground hover:text-accent transition-colors duration-300"
                             >
                                 <span className="text-base sm:text-lg">{email}</span>
                                 <svg
@@ -62,10 +62,10 @@ export default function ContactSection({sectionsRef}: Props){
                                 href={social.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="group p-4 border border-border rounded-lg hover:border-muted-foreground/50 transition-all duration-300 hover:shadow-sm"
+                                className="group p-4 border border-border rounded-lg hover:border-accent/50 transition-all duration-300 hover:shadow-sm hover:-translate-y-0.5"
                             >
                                 <div className="space-y-2">
-                                    <div className="text-foreground group-hover:text-muted-foreground transition-colors duration-300">
+                                    <div className="text-foreground group-hover:text-accent transition-colors duration-300">
                                         {social.name}
                                     </div>
                                     <div className="text-sm text-muted-foreground">{social.handle}</div>
