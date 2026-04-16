@@ -10,7 +10,7 @@ async function requireAdmin(): Promise<boolean> {
 }
 
 export async function GET() {
-    const projects = await getProjects()
+    const projects = await getProjects({ fresh: true })
     return NextResponse.json(projects)
 }
 

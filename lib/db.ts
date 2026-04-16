@@ -250,8 +250,8 @@ function toProject(doc: Record<string, unknown>): ProjectType {
     return rest as ProjectType
 }
 
-export async function getProjects(): Promise<ProjectType[]> {
-    if (projectsCache) return projectsCache
+export async function getProjects({ fresh = false }: { fresh?: boolean } = {}): Promise<ProjectType[]> {
+    if (!fresh && projectsCache) return projectsCache
 
     const col = await getCollection()
     if (!col) {
@@ -279,8 +279,8 @@ export async function saveProjects(projects: ProjectType[]): Promise<void> {
     projectsCache = projects
 }
 
-export async function getProject(slug: string): Promise<ProjectType | null> {
-    const projects = await getProjects()
+export async function getProject(slug: string, opts?: { fresh?: boolean }): Promise<ProjectType | null> {
+    const projects = await getProjects(opts)
     return projects.find(p => p.id === slug || p.title.toLowerCase() === slug) ?? null
 }
 

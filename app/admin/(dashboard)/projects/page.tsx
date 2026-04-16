@@ -4,8 +4,10 @@ import { getProjects } from '@/lib/db'
 import { Plus } from 'lucide-react'
 import ProjectList from '@/components/admin/ProjectList'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminProjectsPage() {
-    const projects = await getProjects()
+    const projects = await getProjects({ fresh: true })
 
     return (
         <div className="space-y-6">
