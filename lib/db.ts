@@ -71,6 +71,7 @@ Add folders to index and Volt will scan them for lightning-fast file searches. N
             windows: 'https://github.com/NotHamxa/Volt/releases/download/v1.1.1/Volt-Setup-1.1.1.exe',
         },
         githubUrl: [{ name: 'Main Repository', link: 'https://github.com/NotHamxa/volt' }],
+        show: true,
     },
     {
         id: 'epsilon',
@@ -115,6 +116,7 @@ Auto-generates ID cards and has a fast QR-based attendance scanner for events.
             { name: 'Epsilon Admin Panel(Desktop)', link: 'https://github.com/NotHamxa/EpsilonAdminPanelElectron' },
             { name: 'Epsilon Admin Panel(Mobile)', link: 'https://github.com/NotHamxa/EpsilonAdminPanelMobile' },
         ],
+        show: true,
     },
     {
         id: 'eaf',
@@ -170,6 +172,7 @@ per aspect and shows how they performed against the rule thresholds.
 </text>`,
         downloadUrl: null,
         githubUrl: [],
+        show: true,
     },
     {
         id: 'cat',
@@ -203,6 +206,7 @@ The shop has stuff like private voice channels, special playtime access, and oth
 </imgText>`,
         downloadUrl: null,
         githubUrl: [{ name: 'Discord Bot', link: 'https://github.com/NotHamxa/RDLN_Discord_Bot' }],
+        show: true,
     },
     {
         id: 'expensetracker',
@@ -235,6 +239,7 @@ The app generates reports showing where you could save money and helps identify 
 </imgText>`,
         downloadUrl: null,
         githubUrl: [],
+        show: true,
     },
 ]
 
@@ -282,7 +287,7 @@ export async function getProject(slug: string): Promise<ProjectType | null> {
 export async function createProject(data: Omit<ProjectType, 'id'>): Promise<ProjectType> {
     const projects = await getProjects()
     const id = data.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
-    const project: ProjectType = { id, ...data }
+    const project: ProjectType = { show: true, ...data, id }
 
     const col = await getCollection()
     if (!col) throw new Error('MongoDB not configured')

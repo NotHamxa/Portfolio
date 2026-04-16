@@ -12,4 +12,5 @@ export interface ProjectType {
     content: string
     downloadUrl: Record<string, string> | null
     githubUrl: GithubRepo[]
+    show: boolean
 }

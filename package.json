@@ -8,7 +8,8 @@
     "lint": "next lint",
     "start": "next start",
     "seed": "tsx --env-file=.env scripts/seed.ts",
-    "migrate-images": "tsx --env-file=.env scripts/migrate-images.ts"
+    "migrate-images": "tsx --env-file=.env scripts/migrate-images.ts",
+    "migrate-show": "tsx --env-file=.env scripts/migrate-show.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
