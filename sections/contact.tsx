@@ -3,6 +3,7 @@
 
 import {RefObject} from "react";
 import Link from "next/link";
+import { Mail, Github, Linkedin, ArrowUpRight } from "lucide-react";
 
 interface Props {
     sectionsRef:RefObject<(HTMLElement | null)[]>
@@ -20,59 +21,47 @@ export default function ContactSection({sectionsRef}: Props){
         { name: "GitHub", handle: "@NotHamxa", url: "https://github.com/NotHamxa" },
         { name: "LinkedIn", handle: "Hamza Ahmed", url: "https://linkedin.com/in/hamzahmed07" },
     ]
+    const rows = [
+        { key: "Email", value: email, href: `mailto:${email}`, icon: Mail, external: false },
+        { key: "GitHub", value: socials[0].handle, href: socials[0].url, icon: Github, external: true },
+        { key: "LinkedIn", value: socials[1].handle, href: socials[1].url, icon: Linkedin, external: true },
+    ]
+
     return (
         <section id="connect" ref={(el) => {
             sectionsRef.current[3] = el
         }} className="py-32 lg:py-40 opacity-0">
-            <div className="grid lg:grid-cols-2 gap-12 sm:gap-16">
-                <div className="space-y-6 sm:space-y-8">
-                    <h2 className="text-3xl sm:text-4xl font-medium">Let&apos;s Connect</h2>
-
-                    <div className="space-y-6">
-                        <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
-                            Always interested in new opportunities and collaborations.
-                        </p>
-
-                        <div className="space-y-4">
-                            <Link
-                                href={`mailto:${email}`}
-                                className="group flex items-center gap-3 text-foreground hover:text-accent transition-colors duration-300"
-                            >
-                                <span className="text-base sm:text-lg">{email}</span>
-                                <svg
-                                    className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                </svg>
-                            </Link>
-                        </div>
-                    </div>
+            <div className="grid lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-20 items-start">
+                <div>
+                    <div className="text-[10.5px] font-mono text-muted-foreground tracking-[0.22em] uppercase mb-3">№ 04</div>
+                    <h2 className="text-5xl sm:text-6xl font-light leading-none tracking-[-0.03em]">
+                        Let&apos;s <span className="font-serif italic text-muted-foreground">connect.</span>
+                    </h2>
                 </div>
 
-                <div className="space-y-6 sm:space-y-8">
-                    <div className="text-sm text-muted-foreground font-mono">ELSEWHERE</div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {socials.map((social) => (
+                <div className="pt-3">
+                    {rows.map((r, i) => {
+                        const Icon = r.icon
+                        return (
                             <Link
-                                key={social.name}
-                                href={social.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="group p-4 border border-border rounded-lg hover:border-accent/50 transition-all duration-300 hover:shadow-sm hover:-translate-y-0.5"
+                                key={r.key}
+                                href={r.href}
+                                {...(r.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                                className={`group grid grid-cols-[20px_88px_1fr_auto] gap-4 py-4 items-center border-b border-border ${
+                                    i === 0 ? "border-t" : ""
+                                }`}
                             >
-                                <div className="space-y-2">
-                                    <div className="text-foreground group-hover:text-accent transition-colors duration-300">
-                                        {social.name}
-                                    </div>
-                                    <div className="text-sm text-muted-foreground">{social.handle}</div>
+                                <Icon className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" strokeWidth={1.5} />
+                                <div className="font-mono text-[10.5px] tracking-[0.18em] text-muted-foreground uppercase">
+                                    {r.key}
                                 </div>
+                                <div className="text-[15px] tracking-[-0.005em] group-hover:text-accent transition-colors duration-300 truncate">
+                                    {r.value}
+                                </div>
+                                <ArrowUpRight className="w-4 h-4 text-muted-foreground/60 group-hover:text-foreground group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" strokeWidth={1.5} />
                             </Link>
-                        ))}
-                    </div>
+                        )
+                    })}
                 </div>
             </div>
         </section>

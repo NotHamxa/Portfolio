@@ -1,12 +1,31 @@
 "use client"
 
-import {RefObject} from "react";
+import {RefObject, useEffect, useState} from "react";
+
+const TAGLINE = "Lowkey writing code all day."
 
 interface Props {
     sectionsRef:RefObject<(HTMLElement | null)[]>
 }
 export default function Header({sectionsRef}:Props){
-    const skills:string[] = ["Python","FAST API", "React","Next.JS", "TypeScript", "C++",".NET","MongoDB","MySql"]
+    const skills:string[] = ["Python","FastAPI","React","Next.js","TypeScript","C++",".NET","MongoDB","MySQL"]
+
+    const [typed, setTyped] = useState(() => {
+        if (typeof window === "undefined") return ""
+        return window.matchMedia("(prefers-reduced-motion: reduce)").matches ? TAGLINE : ""
+    })
+
+    useEffect(() => {
+        if (typed === TAGLINE) return
+        let i = typed.length
+        const id = setInterval(() => {
+            i++
+            setTyped(TAGLINE.slice(0, i))
+            if (i >= TAGLINE.length) clearInterval(id)
+        }, 35)
+        return () => clearInterval(id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <header
@@ -16,60 +35,47 @@ export default function Header({sectionsRef}:Props){
             }}
             className="min-h-screen flex items-center opacity-0"
         >
-            <div className="grid lg:grid-cols-5 gap-12 sm:gap-16 w-full">
-                <div className="lg:col-span-3 space-y-6 sm:space-y-8">
-                    <div className="space-y-3 sm:space-y-2">
-                        <div className="text-sm text-muted-foreground font-mono tracking-wider">PORTFOLIO / 2026</div>
-                        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight">
+            <div className="w-full">
+                <div className="text-[10.5px] font-mono text-muted-foreground tracking-[0.22em] uppercase mb-10">
+                    Portfolio &nbsp;/&nbsp; 2026 &nbsp;·&nbsp; Vol. I
+                </div>
+
+                <div className="grid lg:grid-cols-[1.5fr_1fr] gap-12 lg:gap-20 items-start">
+                    <div>
+                        <h1 className="text-5xl sm:text-6xl lg:text-[104px] font-light leading-[0.94] tracking-[-0.04em]">
                             Hamza
                             <br />
-                            <span className="font-extralight text-muted-foreground">Ahmed</span>
+                            <span className="font-serif italic font-normal text-muted-foreground">Ahmed.</span>
                         </h1>
+
+                        <p className="text-lg sm:text-xl text-muted-foreground leading-[1.65] max-w-[34ch] mt-8 sm:mt-10 min-h-[1.65em]">
+                            <span aria-label={TAGLINE}>{typed}</span>
+                            <span className="blink-cursor text-foreground" aria-hidden="true" />
+                        </p>
                     </div>
 
-                    <div className="space-y-6 max-w-md">
-                        <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed">
-                            Fullstack Developer crafting digital experiences at the intersection of
-                            <span className="text-foreground"> design</span>,<span className="text-foreground"> technology</span>,
-                            and
-                            <span className="text-foreground"> user experience</span>.
-                        </p>
-
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-sm text-muted-foreground">
-                            <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                                Available for work
+                    <div className="flex flex-col gap-7 lg:pt-5">
+                        <div>
+                            <div className="text-[10.5px] font-mono text-foreground tracking-[0.22em] uppercase mb-2">Status</div>
+                            <div className="text-sm text-muted-foreground leading-[1.6] max-w-[28ch]">
+                                Open to work.
                             </div>
-                            <div className="hidden sm:block w-px h-3 bg-border"></div>
-                            <div>Pakistan</div>
+                        </div>
+                        <div>
+                            <div className="text-[10.5px] font-mono text-foreground tracking-[0.22em] uppercase mb-2">Based</div>
+                            <div className="text-sm text-muted-foreground">Islamabad, Pakistan — UTC+5</div>
+                        </div>
+                        <div>
+                            <div className="text-[10.5px] font-mono text-foreground tracking-[0.22em] uppercase mb-2">At</div>
+                            <div className="text-sm text-muted-foreground">NUST · SEECS · since 2025</div>
                         </div>
                     </div>
                 </div>
 
-                <div className="lg:col-span-2 flex flex-col justify-end space-y-6 sm:space-y-8 mt-8 lg:mt-0">
-                    <div className="space-y-4">
-                        <div className="text-sm text-muted-foreground font-mono">CURRENTLY</div>
-                        <div className="space-y-2">
-                            <div className="text-foreground">Student</div>
-                            <div className="text-muted-foreground">@ NUST, SEECS</div>
-                            <div className="text-xs text-muted-foreground">2025 — Present</div>
-                        </div>
-                    </div>
-
-                    <div className="space-y-4">
-                        <div className="text-sm text-muted-foreground font-mono">FOCUS</div>
-                        <div className="flex flex-wrap gap-2">
-                            {skills.map((skill, index) => (
-                                <span
-                                    key={skill}
-                                    className="stagger-child px-3 py-1 text-xs border border-border rounded-full bg-muted/40 backdrop-blur-sm hover:bg-foreground hover:text-background hover:border-foreground transition-all duration-300 cursor-default"
-                                    style={{ animationDelay: `${index * 60}ms` }}
-                                >
-                      {skill}
-                    </span>
-                            ))}
-                        </div>
-                    </div>
+                {/* Skill row — hairline, comma/dot separated */}
+                <div className="mt-20 sm:mt-24 pt-5 border-t border-border flex flex-wrap items-baseline gap-x-6 gap-y-2 font-mono text-[11.5px] tracking-[0.08em] text-muted-foreground">
+                    <span className="text-foreground">Stack</span>
+                    <span>{skills.join("  ·  ")}</span>
                 </div>
             </div>
         </header>

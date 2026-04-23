@@ -17,18 +17,16 @@ export default function ExperienceSection({sectionsRef}: Props) {
         {
             year: "2024",
             role: "Junior Software Trainee",
-            company: "Foxit PVT",
-            description: "Developed and maintained ASP .NET projects.\n" +
-                "",
+            company: "Foxit",
+            description: "Developed and maintained ASP .NET projects — first exposure to real release cycles.",
             tech: ["ASP .NET", "C#", "MySQL"],
         },
         {
             year: "2023",
             role: "Intern",
-            company: "DOST PVT",
-            description: "Getting started with REST APIs, No SQL databases," +
-                "Web authentication and security.",
-            tech: ["Python", "Fast API", "MongoDB"],
+            company: "DOST",
+            description: "REST APIs, NoSQL, auth & security fundamentals — where I learned back-end discipline.",
+            tech: ["Python", "FastAPI", "MongoDB"],
         },
     ]
     return (
@@ -39,46 +37,46 @@ export default function ExperienceSection({sectionsRef}: Props) {
             }}
             className="py-32 lg:py-40 opacity-0"
         >
-            <div className="space-y-12 sm:space-y-16">
-                <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-                    <h2 className="text-3xl sm:text-4xl font-medium">Experience</h2>
-                    <div className="text-sm text-muted-foreground font-mono">2023 — Present</div>
+            <div className="flex items-end justify-between mb-14">
+                <div>
+                    <div className="text-[10.5px] font-mono text-muted-foreground tracking-[0.22em] uppercase mb-3">№ 02</div>
+                    <h2 className="text-4xl sm:text-5xl font-light leading-none tracking-[-0.03em]">
+                        Selected <span className="font-serif italic text-muted-foreground">experience</span>
+                    </h2>
                 </div>
+                <div className="text-right font-mono text-[11px] tracking-[0.14em] text-muted-foreground leading-[1.8]">
+                    2023 — Present
+                    <br />
+                    <span className="text-muted-foreground/60">{String(experiences.length).padStart(2, "0")} positions</span>
+                </div>
+            </div>
 
-                <div className="space-y-8 sm:space-y-12">
-                    {experiences.map((job, index) => (
-                        <div
-                            key={index}
-                            className="group grid lg:grid-cols-12 gap-4 sm:gap-8 py-6 sm:py-8 border-b border-border/50 hover:border-accent/50 transition-colors duration-500"
-                            style={{ animationDelay: `${index * 100}ms` }}
-                        >
-                            <div className="lg:col-span-2">
-                                <div className="text-xl sm:text-2xl font-light text-muted-foreground group-hover:text-foreground transition-colors duration-500">
-                                    {job.year}
-                                </div>
-                            </div>
-
-                            <div className="lg:col-span-6 space-y-3">
-                                <div>
-                                    <h3 className="text-lg sm:text-xl font-medium">{job.role}</h3>
-                                    <div className="text-muted-foreground">{job.company}</div>
-                                </div>
-                                <p className="text-muted-foreground leading-relaxed max-w-lg">{job.description}</p>
-                            </div>
-
-                            <div className="lg:col-span-4 flex flex-wrap gap-2 lg:justify-end mt-2 lg:mt-0">
-                                {job.tech.map((tech) => (
-                                    <span
-                                        key={tech}
-                                        className="px-2 py-1 text-xs text-muted-foreground rounded group-hover:border-muted-foreground/50 transition-colors duration-500"
-                                    >
-                        {tech}
-                      </span>
-                                ))}
-                            </div>
+            <div>
+                {experiences.map((job, index) => (
+                    <div
+                        key={index}
+                        className="group grid grid-cols-[32px_80px_1fr] md:grid-cols-[32px_90px_1fr_180px] gap-x-6 gap-y-2 py-7 items-baseline border-t border-border last:border-b"
+                        style={{ animationDelay: `${index * 100}ms` }}
+                    >
+                        <div className="font-mono text-[11px] text-muted-foreground/60 tabular-nums">
+                            {String(index + 1).padStart(2, "0")}
                         </div>
-                    ))}
-                </div>
+                        <div className="font-mono text-[11px] text-muted-foreground tracking-[0.1em]">
+                            {job.year}
+                        </div>
+                        <div className="col-span-1 md:col-auto">
+                            <div className="text-base sm:text-[17px] font-medium tracking-[-0.005em] group-hover:text-accent transition-colors duration-300">
+                                {job.role} <span className="text-muted-foreground font-normal">— {job.company}</span>
+                            </div>
+                            <p className="text-sm text-muted-foreground leading-[1.7] mt-2 max-w-[58ch]">
+                                {job.description}
+                            </p>
+                        </div>
+                        <div className="font-mono text-[10.5px] text-muted-foreground tracking-[0.06em] md:text-right col-start-3 md:col-start-4">
+                            {job.tech.join(" · ")}
+                        </div>
+                    </div>
+                ))}
             </div>
         </section>
     )

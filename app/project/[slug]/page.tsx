@@ -1,8 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Download, ExternalLink, ArrowLeft, ArrowUp, Share2, Check, ChevronLeft, ChevronRight, X } from "lucide-react"
+import { ExternalLink, ArrowUp, X, ArrowUpRight, ArrowLeft, Download, Share2, Check } from "lucide-react"
 import { useParams } from "next/navigation"
 import { usePageTransition } from "@/components/page-transition"
 import NotFound from "@/components/notFound"
@@ -134,8 +133,31 @@ export default function ProjectDetailPage() {
 
     if (data === undefined) {
         return (
-            <div className="min-h-screen bg-background flex items-center justify-center">
-                <div className="text-muted-foreground text-sm font-mono">Loading...</div>
+            <div className="min-h-screen bg-background">
+                <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12 pt-20 sm:pt-28 pb-14 animate-pulse">
+                    <div className="flex items-center gap-3 mb-10">
+                        <div className="h-3 w-14 bg-muted rounded" />
+                        <div className="h-3 w-16 bg-muted rounded" />
+                        <div className="h-3 w-24 bg-muted rounded" />
+                    </div>
+                    <div className="flex items-start gap-5 sm:gap-7">
+                        <div className="w-14 h-14 sm:w-16 sm:h-16 lg:w-[72px] lg:h-[72px] bg-muted rounded shrink-0 mt-2 sm:mt-3" />
+                        <div className="flex-1 space-y-4">
+                            <div className="h-12 sm:h-20 lg:h-24 w-3/4 bg-muted rounded" />
+                            <div className="h-12 sm:h-20 lg:h-24 w-1/2 bg-muted rounded" />
+                        </div>
+                    </div>
+                    <div className="flex flex-wrap gap-x-12 gap-y-6 mt-14 pt-7 border-t border-border">
+                        <div className="space-y-2">
+                            <div className="h-3 w-10 bg-muted rounded" />
+                            <div className="h-5 w-14 bg-muted rounded" />
+                        </div>
+                        <div className="space-y-2">
+                            <div className="h-3 w-10 bg-muted rounded" />
+                            <div className="h-5 w-20 bg-muted rounded" />
+                        </div>
+                    </div>
+                </div>
             </div>
         )
     }
@@ -227,282 +249,351 @@ export default function ProjectDetailPage() {
                 </div>
             )}
 
-            {/* Sticky header — full-width blur bar */}
+            {/* Sticky breadcrumb — borderless, blur only */}
             <div className={`fixed left-0 right-0 top-0 z-50 transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${showStickyHeader ? "translate-y-0" : "-translate-y-full"}`}>
-                <div className="bg-background/70 backdrop-blur-xl border-b border-border/50">
-                    <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12 flex items-center h-14">
-                        {/* Left — Back */}
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => push("/")}
-                            className="gap-2 text-muted-foreground hover:text-foreground -ml-2"
-                        >
-                            <ArrowLeft className="w-4 h-4" />
-                            <span className="hidden sm:inline">Back</span>
-                        </Button>
-
-                        {/* Center — Logo + Title */}
-                        <div className="flex-1 flex items-center justify-center gap-2.5">
-                            {logo && (
-                                <div className="relative w-6 h-6 rounded-md overflow-hidden border border-border shrink-0">
-                                    <Image src={logo} alt={`${title} logo`} fill className="object-contain p-0.5" />
-                                </div>
-                            )}
-                            <span className="text-sm font-medium tracking-tight truncate max-w-[200px] sm:max-w-none">{title}</span>
+                <div className="bg-background/75 backdrop-blur-xl">
+                    <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12 flex items-center justify-between h-14 font-mono text-[10.5px] tracking-[0.22em] uppercase">
+                        <div className="flex items-center gap-3 text-muted-foreground min-w-0">
+                            <button
+                                onClick={() => push("/")}
+                                className="flex items-center gap-1.5 text-foreground hover:text-accent transition-colors shrink-0"
+                            >
+                                <ArrowLeft className="w-3.5 h-3.5" strokeWidth={1.75} />
+                                Home
+                            </button>
+                            <span className="text-muted-foreground/50">/</span>
+                            <button
+                                onClick={() => push("/#thoughts")}
+                                className="hover:text-foreground transition-colors shrink-0"
+                            >
+                                Projects
+                            </button>
+                            <span className="text-muted-foreground/50">/</span>
+                            <span className="text-foreground truncate normal-case tracking-normal text-[12px]">
+                                {title}
+                            </span>
                         </div>
-
-                        {/* Right — Actions */}
-                        <div className="flex gap-1.5">
+                        <div className="hidden sm:flex items-center gap-5 shrink-0">
                             {downloadUrl && (
-                                <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground hover:text-foreground" onClick={() => setDownloadModalOpen(true)}>
-                                    <Download className="w-3.5 h-3.5" />
-                                    <span className="hidden sm:inline text-xs">Download</span>
-                                </Button>
+                                <button
+                                    onClick={() => setDownloadModalOpen(true)}
+                                    aria-label="Download"
+                                    className="text-muted-foreground hover:text-foreground transition-colors"
+                                >
+                                    <Download className="w-4 h-4" strokeWidth={1.5} />
+                                </button>
                             )}
                             {githubUrl && githubUrl.length > 0 && (
-                                <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground hover:text-foreground" onClick={handleGithubClick}>
-                                    <GithubIcon className="w-3.5 h-3.5" />
-                                    <span className="hidden sm:inline text-xs">GitHub</span>
-                                </Button>
+                                <button
+                                    onClick={handleGithubClick}
+                                    aria-label="GitHub"
+                                    className="text-muted-foreground hover:text-foreground transition-colors"
+                                >
+                                    <GithubIcon className="w-4 h-4" />
+                                </button>
                             )}
+                            <button
+                                onClick={copyLink}
+                                aria-label={copied ? "Copied" : "Share"}
+                                className="text-muted-foreground hover:text-foreground transition-colors"
+                            >
+                                {copied ? <Check className="w-4 h-4" strokeWidth={1.5} /> : <Share2 className="w-4 h-4" strokeWidth={1.5} />}
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Table of contents — desktop sidebar */}
+            {/* Table of contents — tick-mark rail, labels fade in on hover/active */}
             {headings.length > 1 && (
-                <nav className="fixed right-8 top-1/2 -translate-y-1/2 z-40 hidden xl:block">
-                    <div className="flex flex-col gap-3">
-                        {headings.map((h, i) => (
-                            <button
-                                key={i}
-                                onClick={() => headingRefs.current[i]?.scrollIntoView({ behavior: "smooth", block: "center" })}
-                                className={`text-right text-xs font-medium transition-all duration-500 max-w-[160px] truncate ${
+                <nav className="group/toc fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-3 items-end">
+                    {headings.map((h, i) => (
+                        <button
+                            key={i}
+                            onClick={() => headingRefs.current[i]?.scrollIntoView({ behavior: "smooth", block: "center" })}
+                            className="group/tick flex items-center gap-3 cursor-pointer"
+                            aria-label={h.content}
+                        >
+                            <span
+                                className={`font-mono text-[10.5px] tracking-[0.08em] max-w-[180px] truncate opacity-0 -translate-x-1 transition-all duration-300 group-hover/toc:opacity-100 group-hover/toc:translate-x-0 ${
                                     activeHeading === i
-                                        ? "text-foreground"
-                                        : "text-muted-foreground/40 hover:text-muted-foreground/70"
+                                        ? "text-foreground !opacity-100 !translate-x-0"
+                                        : "text-muted-foreground group-hover/tick:text-foreground"
                                 }`}
                             >
                                 {h.content}
-                            </button>
-                        ))}
-                    </div>
+                            </span>
+                            <span
+                                className={`h-px transition-all duration-300 ${
+                                    activeHeading === i
+                                        ? "w-8 bg-foreground"
+                                        : "w-4 bg-muted-foreground/40 group-hover/tick:w-6 group-hover/tick:bg-foreground"
+                                }`}
+                            />
+                        </button>
+                    ))}
                 </nav>
             )}
 
             <div className="min-h-screen bg-background">
                 {/* Hero */}
                 <div className="border-b border-border">
-                    <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12 pt-16 sm:pt-24 pb-12 sm:pb-14">
+                    <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12 pt-20 sm:pt-28 pb-14">
                         <div ref={titleRef}>
-                            {/* Back + Share row */}
-                            <div className="flex items-center justify-between mb-10">
-                                <Button
-                                    variant="ghost"
+                            {/* Breadcrumb eyebrow */}
+                            <div className="flex items-center gap-3 font-mono text-[10.5px] tracking-[0.22em] uppercase text-muted-foreground mb-10">
+                                <button
                                     onClick={() => push("/")}
-                                    className="-ml-3 gap-2 hover:gap-3 transition-all text-muted-foreground hover:text-foreground"
+                                    className="flex items-center gap-1.5 text-foreground hover:text-accent transition-colors"
                                 >
-                                    <ArrowLeft className="w-4 h-4" />
-                                    Back
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={copyLink}
-                                    className="gap-2 text-muted-foreground hover:text-foreground"
+                                    <ArrowLeft className="w-3 h-3" strokeWidth={2} />
+                                    Home
+                                </button>
+                                <span className="text-muted-foreground/50">/</span>
+                                <button
+                                    onClick={() => push("/#thoughts")}
+                                    className="hover:text-foreground transition-colors"
                                 >
-                                    {copied ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
-                                    {copied ? "Copied" : "Share"}
-                                </Button>
+                                    Projects
+                                </button>
+                                <span className="text-muted-foreground/50">/</span>
+                                <span className="text-foreground truncate normal-case tracking-normal text-[12px] font-sans">
+                                    {title}
+                                </span>
+                                {date && <span className="text-muted-foreground/60">· {date}</span>}
                             </div>
 
-                            {/* Meta label */}
-                            <p className="text-xs font-mono text-muted-foreground tracking-widest mb-5 uppercase">
-                                Project{date ? ` / ${date}` : ""}
-                            </p>
-
-                            {/* Title */}
-                            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-medium tracking-tight leading-[1.05] mb-10">
-                                {title}
-                            </h1>
-
-                            {/* Divider */}
-                            <div className="h-px w-full bg-border mb-8" />
-
-                            {/* Logo + Actions row */}
-                            <div className="flex items-center gap-4">
+                            {/* Title — logo beside, full serif display */}
+                            <div className="flex items-start gap-5 sm:gap-7">
                                 {logo && (
-                                    <div className="relative w-9 h-9 rounded-lg overflow-hidden border border-border bg-muted/20 shrink-0">
-                                        <Image src={logo} alt={`${title} logo`} fill className="object-contain p-1.5" />
+                                    <Image
+                                        src={logo}
+                                        alt={`${title} logo`}
+                                        width={72}
+                                        height={72}
+                                        className="w-14 h-14 sm:w-16 sm:h-16 lg:w-[72px] lg:h-[72px] object-contain shrink-0 mt-2 sm:mt-3"
+                                    />
+                                )}
+                                <h1 className="font-serif text-5xl sm:text-7xl lg:text-[96px] font-normal tracking-[-0.03em] leading-[0.96] max-w-[14ch]">
+                                    {title}
+                                </h1>
+                            </div>
+
+                            {/* Spec strip */}
+                            <div className="flex flex-wrap items-end gap-x-12 gap-y-6 mt-14 pt-7 border-t border-border">
+                                {date && (
+                                    <div>
+                                        <div className="font-mono text-[10.5px] tracking-[0.22em] uppercase text-muted-foreground mb-2">Year</div>
+                                        <div className="text-[17px] tracking-[-0.01em]">{date}</div>
                                     </div>
                                 )}
-                                <div className="flex gap-2 ml-auto">
+                                <div>
+                                    <div className="font-mono text-[10.5px] tracking-[0.22em] uppercase text-muted-foreground mb-2">Index</div>
+                                    <div className="text-[17px] tracking-[-0.01em]">
+                                        № {String(currentIndex + 1).padStart(2, "0")}
+                                        {allProjects.length > 0 && (
+                                            <span className="text-muted-foreground"> of {String(allProjects.length).padStart(2, "0")}</span>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Actions — right aligned icon + label links */}
+                                <div className="w-full sm:w-auto sm:ml-auto flex items-end gap-5 font-mono text-[11px] tracking-[0.1em]">
                                     {downloadUrl && (
-                                        <Button variant="outline" size="sm" className="gap-2" onClick={() => setDownloadModalOpen(true)}>
-                                            <Download className="w-4 h-4" />
+                                        <button
+                                            onClick={() => setDownloadModalOpen(true)}
+                                            className="group flex items-center gap-1.5 text-foreground border-b border-foreground pb-1 hover:text-accent hover:border-accent transition-colors"
+                                        >
+                                            <Download className="w-3.5 h-3.5" strokeWidth={1.75} />
                                             Download
-                                        </Button>
+                                        </button>
                                     )}
                                     {githubUrl && githubUrl.length > 0 && (
-                                        <Button variant="outline" size="sm" className="gap-2" onClick={handleGithubClick}>
-                                            <GithubIcon className="w-4 h-4" />
+                                        <button
+                                            onClick={handleGithubClick}
+                                            className="flex items-center gap-1.5 text-muted-foreground pb-1 hover:text-foreground transition-colors"
+                                        >
+                                            <GithubIcon className="w-3.5 h-3.5" />
                                             GitHub
-                                        </Button>
+                                        </button>
                                     )}
+                                    <button
+                                        onClick={copyLink}
+                                        className="flex items-center gap-1.5 text-muted-foreground pb-1 hover:text-foreground transition-colors"
+                                    >
+                                        {copied ? <Check className="w-3.5 h-3.5" strokeWidth={1.75} /> : <Share2 className="w-3.5 h-3.5" strokeWidth={1.75} />}
+                                        {copied ? "Copied" : "Share"}
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Content blocks */}
-                <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12 py-16 lg:py-24">
-                    <div className="space-y-14 lg:space-y-20">
-                        {blocks.map((block, idx) => {
-                            const delay = idx * 60
+                {/* Content blocks — left-aligned editorial body, images break out wider */}
+                <article className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12 py-16 lg:py-24">
+                    {blocks.map((block, idx) => {
+                        const delay = idx * 60
+                        const reveal = "opacity-0 translate-y-8 transition-all duration-700"
 
-                            if (block.type === "text") {
-                                return (
-                                    <div key={idx} ref={(el) => { sectionsRef.current[idx] = el }}
-                                        className="opacity-0 translate-y-8 transition-all duration-700"
-                                        style={{ transitionDelay: `${delay}ms` }}>
-                                        <p className="text-base sm:text-lg leading-[1.85] text-muted-foreground max-w-2xl">
-                                            {renderTextWithLinks(block.content)}
-                                        </p>
+                        if (block.type === "text") {
+                            return (
+                                <div key={idx} ref={(el) => { sectionsRef.current[idx] = el }}
+                                    className={`${reveal} max-w-[68ch] mb-10 sm:mb-12`}
+                                    style={{ transitionDelay: `${delay}ms` }}>
+                                    <p className="text-base sm:text-[17px] leading-[1.85] text-muted-foreground">
+                                        {renderTextWithLinks(block.content)}
+                                    </p>
+                                </div>
+                            )
+                        }
+
+                        if (block.type === "heading") {
+                            const hIdx = headingCounter++
+                            return (
+                                <div key={idx}
+                                    ref={(el) => {
+                                        sectionsRef.current[idx] = el
+                                        headingRefs.current[hIdx] = el
+                                    }}
+                                    className={`${reveal} max-w-[68ch] pt-10 sm:pt-14 mb-8 sm:mb-10 first:pt-0`}
+                                    style={{ transitionDelay: `${delay}ms` }}>
+                                    <div className="font-mono text-[10.5px] tracking-[0.22em] uppercase text-muted-foreground mb-4 tabular-nums">
+                                        № {String(hIdx + 1).padStart(2, "0")}
                                     </div>
-                                )
-                            }
+                                    <h2 className="font-serif font-normal text-3xl sm:text-[38px] tracking-[-0.015em] leading-[1.1] max-w-[22ch]">
+                                        {block.content}
+                                    </h2>
+                                </div>
+                            )
+                        }
 
-                            if (block.type === "heading") {
-                                const hIdx = headingCounter++
-                                return (
-                                    <div key={idx}
-                                        ref={(el) => {
-                                            sectionsRef.current[idx] = el
-                                            headingRefs.current[hIdx] = el
-                                        }}
-                                        className="opacity-0 translate-y-8 transition-all duration-700"
-                                        style={{ transitionDelay: `${delay}ms` }}>
-                                        <h2 className="text-2xl sm:text-3xl font-medium tracking-tight pl-4 border-l-2 border-foreground">
-                                            {block.content}
-                                        </h2>
+                        if (block.type === "img") {
+                            return (
+                                <div key={idx} ref={(el) => { sectionsRef.current[idx] = el }}
+                                    className={`${reveal} my-14 sm:my-16`}
+                                    style={{ transitionDelay: `${delay}ms` }}>
+                                    <div
+                                        className="group w-full overflow-hidden bg-muted/40 cursor-zoom-in"
+                                        onClick={() => setLightboxSrc(block.content)}
+                                    >
+                                        <Image
+                                            src={block.content}
+                                            alt=""
+                                            width={1920}
+                                            height={1080}
+                                            className="w-full h-auto object-contain transition-transform duration-[900ms] ease-out group-hover:scale-[1.01]"
+                                            style={{ maxHeight: '75vh' }}
+                                            placeholder="empty"
+                                        />
                                     </div>
-                                )
-                            }
+                                </div>
+                            )
+                        }
 
-                            if (block.type === "img") {
-                                return (
-                                    <div key={idx} ref={(el) => { sectionsRef.current[idx] = el }}
-                                        className="opacity-0 translate-y-8 transition-all duration-700"
-                                        style={{ transitionDelay: `${delay}ms` }}>
+                        if (block.type === "imgText") {
+                            const isImageLeft = block.imgPosition === "left"
+                            return (
+                                <div key={idx} ref={(el) => { sectionsRef.current[idx] = el }}
+                                    className={`${reveal} my-14 sm:my-16`}
+                                    style={{ transitionDelay: `${delay}ms` }}>
+                                    <div className={`grid lg:grid-cols-2 gap-8 lg:gap-12 items-center ${isImageLeft ? "" : "lg:grid-flow-dense"}`}>
                                         <div
-                                            className="w-full rounded-2xl overflow-hidden border border-border bg-muted/10 cursor-zoom-in hover:border-muted-foreground/30 transition-colors duration-300"
-                                            onClick={() => setLightboxSrc(block.content)}
+                                            className={`w-full overflow-hidden bg-muted/40 cursor-zoom-in ${isImageLeft ? "" : "lg:col-start-2"}`}
+                                            onClick={() => setLightboxSrc(block.imgSrc || "")}
                                         >
                                             <Image
-                                                src={block.content}
-                                                alt={`Project screenshot ${idx + 1}`}
-                                                width={1920}
-                                                height={1080}
+                                                src={block.imgSrc || ""}
+                                                alt=""
+                                                width={800}
+                                                height={600}
                                                 className="w-full h-auto object-contain"
-                                                style={{ maxHeight: '70vh' }}
+                                                style={{ maxHeight: '520px' }}
                                                 placeholder="empty"
                                             />
                                         </div>
-                                    </div>
-                                )
-                            }
-
-                            if (block.type === "imgText") {
-                                const isImageLeft = block.imgPosition === "left"
-                                return (
-                                    <div key={idx} ref={(el) => { sectionsRef.current[idx] = el }}
-                                        className="opacity-0 translate-y-8 transition-all duration-700"
-                                        style={{ transitionDelay: `${delay}ms` }}>
-                                        <div className={`grid lg:grid-cols-2 gap-8 lg:gap-12 items-center ${isImageLeft ? "" : "lg:grid-flow-dense"}`}>
-                                            <div
-                                                className={`w-full rounded-xl overflow-hidden border border-border bg-muted/10 cursor-zoom-in hover:border-muted-foreground/30 transition-colors duration-300 ${isImageLeft ? "" : "lg:col-start-2"}`}
-                                                onClick={() => setLightboxSrc(block.imgSrc || "")}
-                                            >
-                                                <Image
-                                                    src={block.imgSrc || ""}
-                                                    alt="Feature illustration"
-                                                    width={800}
-                                                    height={600}
-                                                    className="w-full h-auto object-contain"
-                                                    style={{ maxHeight: '500px' }}
-                                                    placeholder="empty"
-                                                />
-                                            </div>
-                                            <div className={isImageLeft ? "" : "lg:col-start-1 lg:row-start-1"}>
-                                                <p className="text-base sm:text-lg leading-[1.85] text-muted-foreground">
-                                                    {renderTextWithLinks(block.content)}
-                                                </p>
-                                            </div>
+                                        <div className={isImageLeft ? "" : "lg:col-start-1 lg:row-start-1"}>
+                                            <p className="text-base sm:text-[17px] leading-[1.85] text-muted-foreground max-w-[52ch]">
+                                                {renderTextWithLinks(block.content)}
+                                            </p>
                                         </div>
                                     </div>
-                                )
-                            }
+                                </div>
+                            )
+                        }
 
-                            if (block.type === "link") {
-                                return (
-                                    <div key={idx} ref={(el) => { sectionsRef.current[idx] = el }}
-                                        className="opacity-0 translate-y-8 transition-all duration-700"
-                                        style={{ transitionDelay: `${delay}ms` }}>
-                                        <a
-                                            href={block.href}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="group inline-flex items-center gap-3 px-5 py-3 border border-border rounded-lg hover:border-foreground transition-all duration-300 text-sm font-medium"
-                                        >
-                                            {block.content}
-                                            <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
-                                        </a>
-                                    </div>
-                                )
-                            }
+                        if (block.type === "link") {
+                            return (
+                                <div key={idx} ref={(el) => { sectionsRef.current[idx] = el }}
+                                    className={`${reveal} max-w-[68ch] my-10`}
+                                    style={{ transitionDelay: `${delay}ms` }}>
+                                    <a
+                                        href={block.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="group inline-flex items-baseline gap-2 font-mono text-[11px] tracking-[0.1em] text-foreground border-b border-foreground pb-1 hover:text-accent hover:border-accent transition-colors"
+                                    >
+                                        {block.content}
+                                        <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
+                                    </a>
+                                </div>
+                            )
+                        }
 
-                            return null
-                        })}
-                    </div>
-                </div>
+                        return null
+                    })}
+                </article>
 
-                {/* Next / Previous project navigation */}
+                {/* Next / Previous — single hairline, keyboard hint centered between */}
                 {(prevProject || nextProject) && (
-                    <div className="border-t border-border">
-                        <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12 py-12 sm:py-16">
-                            <div className="grid grid-cols-2 gap-4 sm:gap-8">
-                                {prevProject ? (
-                                    <button
-                                        onClick={() => push(`/project/${prevProject.id}`)}
-                                        className="group flex items-center gap-3 py-4 pr-4 text-left"
-                                    >
-                                        <ChevronLeft className="w-5 h-5 shrink-0 text-muted-foreground group-hover:-translate-x-1 group-hover:text-foreground transition-all duration-300" />
-                                        <div className="min-w-0">
-                                            <div className="text-xs font-mono text-muted-foreground tracking-widest uppercase mb-1">Previous</div>
-                                            <div className="text-base sm:text-lg font-medium group-hover:text-accent transition-colors duration-300 line-clamp-1">
-                                                {prevProject.title}
-                                            </div>
+                    <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-12 pt-10 pb-20 sm:pb-24">
+                        <div className="grid grid-cols-[1fr_auto_1fr] gap-6 sm:gap-10 pt-10 border-t border-border items-start">
+                            {prevProject ? (
+                                <button
+                                    onClick={() => push(`/project/${prevProject.id}`)}
+                                    className="group text-left"
+                                >
+                                    <div className="font-mono text-[10.5px] tracking-[0.22em] uppercase text-muted-foreground mb-3 group-hover:-translate-x-0.5 transition-transform duration-300">
+                                        ← Previous
+                                    </div>
+                                    <div className="font-serif text-xl sm:text-2xl font-normal tracking-[-0.01em] group-hover:text-accent transition-colors duration-300">
+                                        {prevProject.title}
+                                    </div>
+                                    {prevProject.date && (
+                                        <div className="font-mono text-[10.5px] text-muted-foreground tracking-[0.1em] mt-1.5">
+                                            {prevProject.date}
                                         </div>
-                                    </button>
-                                ) : <div />}
-                                {nextProject ? (
-                                    <button
-                                        onClick={() => push(`/project/${nextProject.id}`)}
-                                        className="group flex items-center justify-end gap-3 py-4 pl-4 text-right"
-                                    >
-                                        <div className="min-w-0">
-                                            <div className="text-xs font-mono text-muted-foreground tracking-widest uppercase mb-1">Next</div>
-                                            <div className="text-base sm:text-lg font-medium group-hover:text-accent transition-colors duration-300 line-clamp-1">
-                                                {nextProject.title}
-                                            </div>
-                                        </div>
-                                        <ChevronRight className="w-5 h-5 shrink-0 text-muted-foreground group-hover:translate-x-1 group-hover:text-foreground transition-all duration-300" />
-                                    </button>
-                                ) : <div />}
+                                    )}
+                                </button>
+                            ) : <div />}
+
+                            {/* Keyboard hint — centered between prev and next */}
+                            <div className="hidden sm:flex flex-col items-center gap-1.5 pt-1 font-mono text-[10px] tracking-[0.16em] uppercase text-muted-foreground/70 self-center">
+                                <div className="flex items-center gap-1.5">
+                                    <kbd className="inline-flex items-center justify-center w-6 h-6 border border-border rounded text-[11px] leading-none">←</kbd>
+                                    <kbd className="inline-flex items-center justify-center w-6 h-6 border border-border rounded text-[11px] leading-none">→</kbd>
+                                </div>
+                                <span>to navigate</span>
                             </div>
+
+                            {nextProject ? (
+                                <button
+                                    onClick={() => push(`/project/${nextProject.id}`)}
+                                    className="group text-right"
+                                >
+                                    <div className="font-mono text-[10.5px] tracking-[0.22em] uppercase text-muted-foreground mb-3 group-hover:translate-x-0.5 transition-transform duration-300">
+                                        Next →
+                                    </div>
+                                    <div className="font-serif text-xl sm:text-2xl font-normal tracking-[-0.01em] group-hover:text-accent transition-colors duration-300">
+                                        {nextProject.title}
+                                    </div>
+                                    {nextProject.date && (
+                                        <div className="font-mono text-[10.5px] text-muted-foreground tracking-[0.1em] mt-1.5">
+                                            {nextProject.date}
+                                        </div>
+                                    )}
+                                </button>
+                            ) : <div />}
                         </div>
                     </div>
                 )}

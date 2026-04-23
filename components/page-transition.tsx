@@ -42,20 +42,22 @@ export default function PageTransition({ children }: { children: React.ReactNode
                 })
                 pendingHref.current = null
             }
-        }, 300) // matches CSS duration
+        }, 400) // matches CSS duration
         return () => clearTimeout(t)
     }, [state, router, startTransition])
 
+    // NOTE: at rest (visible), we deliberately don't apply transform/filter classes —
+    // they create a containing block that breaks `position: fixed` for descendants.
     const className =
         state === "entering"
-            ? "opacity-0"
+            ? "opacity-0 translate-y-3"
             : state === "exiting"
-                ? "opacity-0"
+                ? "opacity-0 -translate-y-2"
                 : "opacity-100"
 
     return (
         <TransitionContext.Provider value={{ push }}>
-            <div className={`transition-all duration-300 ease-out ${className}`}>
+            <div className={`transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${className}`}>
                 {children}
             </div>
         </TransitionContext.Provider>
