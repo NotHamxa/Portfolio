@@ -33,6 +33,12 @@ export default function AdminNav() {
                         >
                             Media
                         </Link>
+                        <Link
+                            href="/admin/telemetry"
+                            className={`text-sm transition-colors ${pathname.startsWith('/admin/telemetry') ? 'text-foreground font-medium' : 'text-muted-foreground hover:text-foreground'}`}
+                        >
+                            Telemetry
+                        </Link>
                     </nav>
                 </div>
                 <Button variant="ghost" size="sm" onClick={handleLogout}>
