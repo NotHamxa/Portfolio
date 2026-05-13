@@ -10,6 +10,7 @@ import { ArrowUpRight } from "lucide-react"
 
 interface Props {
     sectionsRef: RefObject<(HTMLElement | null)[]>
+    projects: ProjectType[]
 }
 
 const VISIBLE_COUNT = 7 // featured + 6 grid cards
@@ -186,43 +187,14 @@ function ProjectCard({
     )
 }
 
-function ProjectSkeleton() {
-    return (
-        <div className="border border-border p-6 sm:p-7 animate-pulse">
-            <div className="flex items-center justify-between mb-7">
-                <div className="h-3 w-10 bg-muted rounded" />
-                <div className="h-3 w-12 bg-muted rounded" />
-            </div>
-            <div className="flex items-center gap-3 mb-3">
-                <div className="w-8 h-8 bg-muted rounded" />
-                <div className="h-6 w-40 bg-muted rounded" />
-            </div>
-            <div className="h-3 w-full bg-muted rounded mb-2" />
-            <div className="h-3 w-5/6 bg-muted rounded" />
-        </div>
-    )
-}
-
-export default function ProjectsSection({ sectionsRef }: Props) {
+export default function ProjectsSection({ sectionsRef, projects }: Props) {
     const { push } = usePageTransition()
-    const [projects, setProjects] = useState<ProjectType[]>([])
-    const [loading, setLoading] = useState(true)
     const [archiveOpen, setArchiveOpen] = useState(false)
 
     const openProject = (id: string) => {
         setArchiveOpen(false)
         push(`/project/${id}`)
     }
-
-    useEffect(() => {
-        fetch('/api/projects')
-            .then(r => r.json())
-            .then((data) => {
-                setProjects(data)
-                setLoading(false)
-            })
-            .catch(() => setLoading(false))
-    }, [])
 
     return (
         <section
@@ -246,17 +218,8 @@ export default function ProjectsSection({ sectionsRef }: Props) {
                     </div>
                 </div>
 
-                {/* Loading skeleton */}
-                {loading && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        {[0, 1, 2, 3].map((i) => (
-                            <ProjectSkeleton key={i} />
-                        ))}
-                    </div>
-                )}
-
                 {/* Project list */}
-                {!loading && projects.length > 0 && (
+                {projects.length > 0 && (
                     <>
                         <FeaturedProject project={projects[0]} onClick={() => openProject(projects[0].id)} />
 
