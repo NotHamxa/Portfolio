@@ -15,6 +15,13 @@ type experience = {
 export default function ExperienceSection({sectionsRef}: Props) {
     const experiences:experience[] = [
         {
+            year: "2026",
+            role: "Intern",
+            company: "MacCare",
+            description: "",
+            tech: [],
+        },
+        {
             year: "2024",
             role: "Junior Software Trainee",
             company: "Foxit",
