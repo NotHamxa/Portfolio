@@ -35,7 +35,7 @@ async function fetchTimelinesFromDb(): Promise<TimelineType[]> {
 const getCachedTimelines = unstable_cache(
     fetchTimelinesFromDb,
     ['timelines-list'],
-    { tags: ['timelines'], revalidate: 3600 }
+    { tags: ['timelines'], revalidate: 86400 }
 )
 
 function invalidateTimelines() {

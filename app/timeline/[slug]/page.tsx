@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import { getTimeline, getTimelines } from '@/lib/timelineDb'
 import TimelineClient from '@/components/TimelineClient'
 
-export const revalidate = 3600
+export const revalidate = 86400
 
 export async function generateStaticParams() {
     try {

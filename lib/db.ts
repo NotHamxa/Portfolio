@@ -259,7 +259,7 @@ async function fetchProjectsFromDb(): Promise<ProjectType[]> {
 const getCachedProjects = unstable_cache(
     fetchProjectsFromDb,
     ['projects-list'],
-    { tags: ['projects'], revalidate: 3600 }
+    { tags: ['projects'], revalidate: 86400 }
 )
 
 function invalidateProjects() {

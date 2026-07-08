@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import { getProject, getProjects } from '@/lib/db'
 import ProjectDetailClient from '@/components/ProjectDetailClient'
 
-export const revalidate = 3600
+export const revalidate = 86400
 
 export async function generateStaticParams() {
     try {
