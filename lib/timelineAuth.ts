@@ -1,15 +1,8 @@
 import { NextRequest } from 'next/server'
+import { isApiAuthorized } from './apiAuth'
 
-// Shared-secret auth for the programmatic timeline API. The secret is passed as a
-// Bearer token (`Authorization: Bearer <secret>`) or an `x-api-key` header, matched
-// against TIMELINE_API_SECRET. Lets an automated agent (e.g. Claude) manage timelines.
+// Auth for the programmatic timeline API. Secret lives in the TIMELINE_API_SECRET
+// environment variable (set on the host and in Vercel).
 export function isTimelineApiAuthorized(req: NextRequest): boolean {
-    const secret = process.env.TIMELINE_API_SECRET
-    if (!secret) return false
-
-    const auth = req.headers.get('authorization')
-    const bearer = auth?.startsWith('Bearer ') ? auth.slice(7).trim() : null
-    const apiKey = req.headers.get('x-api-key')?.trim() ?? null
-
-    return bearer === secret || apiKey === secret
+    return isApiAuthorized(req, 'TIMELINE_API_SECRET')
 }
